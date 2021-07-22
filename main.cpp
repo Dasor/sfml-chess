@@ -1,13 +1,16 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "setup.h"
+#include "setup.hpp"
+#include "pieces.h"
 #define boardsize 800
+#define spritesize 150
 
 int main()
 {
     // create the window
     sf::RenderWindow window(sf::VideoMode(boardsize, boardsize), "My window", sf::Style::Titlebar | sf::Style::Close);
-
+    int squaresize = boardsize/8;
+    BoardRep board = initBoard(squaresize);
     // run the program as long as the window is open
     while (window.isOpen())
     {
@@ -23,15 +26,15 @@ int main()
 
         window.clear(sf::Color::Black);
 
-        /*sf::Texture texture;
-        texture.loadFromFile("image.png");
+        DrawBoard(squaresize,window);
+        sf::Texture texture;
+        texture.loadFromFile("pieces/bqueen.png");
         texture.setSmooth(true);
         sf::Sprite sprite;
         sprite.setTexture(texture);
-        sprite.scale(sf::Vector2f(0.13f, 0.13f));
-        window.draw(sprite);*/
-
-        DrawBoard(boardsize/8,window);
+        sprite.setScale(((float)squaresize/spritesize),((float)squaresize/spritesize));
+        sprite.setPosition(squaresize,0);
+        window.draw(sprite);
 
         window.display();
 

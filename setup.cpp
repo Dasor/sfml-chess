@@ -1,6 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+typedef struct{
+  int x;
+  int y;
+}Coords;
+
+typedef struct{
+
+  int squares[64];
+  Coords coordinates[64];
+
+}BoardRep;
+
+
 void DrawBoard(int squaresize,sf::RenderWindow &window){
 
   sf::RectangleShape square;
@@ -40,3 +53,21 @@ void DrawBoard(int squaresize,sf::RenderWindow &window){
   }
 
 }
+
+BoardRep initBoard(int squaresize){
+  BoardRep board;
+
+  for(int i = 0; i< 8;i++){
+    for(int j = 0 ; j<8; j++){
+      board.coordinates[j+(8*i)].x =j*squaresize;
+      board.coordinates[j+(8*i)].y =i*squaresize;
+    }
+  }
+
+  return board;
+}
+
+/*void DrawPieces(sf::RenderWindow &window, int *board){
+  for(int i = 0; i<64;i++){
+
+  }*/
