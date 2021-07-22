@@ -1,149 +1,141 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "pieces.hpp"
 
 
-enum pieces{
-  empty,pawn,knight,bishop,king,queen,rook
-};
+Piece::Piece(int position,char color){
+  Position = position;
+  Color = color;
+}
 
-class Piece{
-protected:
-  int ID;
-  int Position;
-  char Color;
-  std::string Path;
-public:
-  Piece(int position,char color){
-    Position = position;
-    Color = color;
+void Piece::Move(){}
+
+int Piece::getID(){
+  return ID;
+}
+
+int Piece::getPosition(){
+  return Position;
+}
+
+char Piece::getColor(){
+  return Color;
+}
+
+std::string Piece::getPath(){
+  return Path;
+}
+
+Pawn::Pawn(int position,char color)
+:Piece(position,color)
+{
+  ID = pieces::pawn;
+  if(color == 'w'){
+    Path = "pieces/wpawn.png";
+  }else{
+    Path = "pieces/bpawn.png";
   }
-  virtual void Move() = 0;
-};
+}
 
-class Pawn : public Piece{
-public:
-  Pawn(int position,char color)
-    :Piece(position,color)
-  {
-    ID = pieces::pawn;
-    if(color == 'w'){
-      Path = "pieces/wpawn.png";
-    }else{
-      Path = "pieces/bpawn.png";
-    }
-  }
-
-  void Move(){
-    if(Color == 'b'){
-      Position += 8;
-    }else{
-      Position -= 8;
-   }
- }
-
-
-};
-
-class Knight : public Piece{
-public:
-  Knight(int position,char color)
-    :Piece(position,color)
-  {
-    ID = pieces::knight;
-    if(color == 'w'){
-      Path = "pieces/wknight.png";
-    }else{
-      Path = "pieces/bknight.png";
-    }
-  }
-
-  void Move(){
-    Position -= 15;
-  }
-
-
-};
-
-class Bishop : public Piece{
-public:
-  Bishop(int position,char color)
-    :Piece(position,color)
-  {
-    ID = pieces::bishop;
-    if(color == 'w'){
-      Path = "pieces/wbishop.png";
-    }else{
-      Path = "pieces/bbishop.png";
-    }
-  }
-
-  void Move(){
-    Position -= 7;
-  }
-
-
-};
-
-class King : public Piece{
-public:
-  King(int position,char color)
-    :Piece(position,color)
-  {
-    ID = pieces::king;
-    if(color == 'w'){
-      Path = "pieces/wking.png";
-    }else{
-      Path = "pieces/bking.png";
-    }
-  }
-
-  void Move(){
+void Pawn::Move(){
+  if(Color == 'b'){
+    Position += 8;
+  }else{
     Position -= 8;
   }
+}
 
 
-};
 
-class Queen : public Piece{
-public:
-  Queen(int position,char color)
-    :Piece(position,color)
-  {
-    ID = pieces::queen;
-    if(color == 'w'){
-      Path = "pieces/wqueen.png";
-    }else{
-      Path = "pieces/bqueen.png";
-    }
+
+
+
+Knight::Knight(int position,char color)
+:Piece(position,color)
+{
+  ID = pieces::knight;
+  if(color == 'w'){
+    Path = "pieces/wknight.png";
+  }else{
+    Path = "pieces/bknight.png";
   }
+}
 
-  void Move(){
-    Position -= 7;
+void Knight::Move(){
+  Position -= 15;
+}
+
+
+
+
+
+Bishop::Bishop(int position,char color)
+:Piece(position,color)
+{
+  ID = pieces::bishop;
+  if(color == 'w'){
+    Path = "pieces/wbishop.png";
+  }else{
+    Path = "pieces/bbishop.png";
   }
+}
 
-};
+void Bishop::Move(){
+  Position -= 7;
+}
 
-class Rook : public Piece{
-public:
-  Rook(int position,char color)
-    :Piece(position,color)
-  {
-    ID = pieces::rook;
-    if(color == 'w'){
-      Path = "pieces/wrook.png";
-    }else{
-      Path = "pieces/brook.png";
-    }
+
+King::King(int position,char color)
+:Piece(position,color)
+{
+  ID = pieces::king;
+  if(color == 'w'){
+    Path = "pieces/wking.png";
+  }else{
+    Path = "pieces/bking.png";
   }
+}
 
-  void Move(){
-    Position -= 8;
+void King::Move(){
+  Position -= 8;
+}
+
+
+Queen::Queen(int position,char color)
+:Piece(position,color)
+{
+  ID = pieces::queen;
+  if(color == 'w'){
+    Path = "pieces/wqueen.png";
+  }else{
+    Path = "pieces/bqueen.png";
   }
+}
 
-};
+void Queen::Move(){
+  Position -= 7;
+}
 
-void InitPieces(){
-  Piece *pieces[32];
+
+Rook::Rook(int position,char color)
+:Piece(position,color)
+{
+  ID = pieces::rook;
+  if(color == 'w'){
+    Path = "pieces/wrook.png";
+  }else{
+    Path = "pieces/brook.png";
+  }
+}
+
+void Rook::Move(){
+  Position -= 8;
+}
+
+
+
+Piece **InitPieces(){
+  Piece **pieces = new Piece*[32];
   //white pieces
   for(int i = 0; i < 8;i++){
     pieces[i] = new Pawn (48+i,'w');
@@ -158,8 +150,8 @@ void InitPieces(){
   pieces[15] = new Queen(59,'w');
 
   //black pieces
-  for(int i = 16; i < 24;i++){
-    pieces[i] = new Pawn (8+i,'b');
+  for(int j = 0,i = 16; i < 24;i++,j++){
+    pieces[i] = new Pawn (8+j,'b');
   }
   pieces[24] = new Rook(0,'b');
   pieces[25] = new Rook(7,'b');
@@ -169,4 +161,6 @@ void InitPieces(){
   pieces[29] = new Bishop(5,'b');
   pieces[30] = new King(3,'b');
   pieces[31] = new Queen(4,'b');
+
+  return pieces;
 }

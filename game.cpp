@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "pieces.hpp"
+#define spritesize 150
 
 typedef struct{
   int x;
@@ -67,7 +69,27 @@ BoardRep initBoard(int squaresize){
   return board;
 }
 
-/*void DrawPieces(sf::RenderWindow &window, int *board){
-  for(int i = 0; i<64;i++){
+void DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window, int squaresize){
 
-  }*/
+  for(int i = 0; i<64;i++){
+    board.squares[i] = empty;
+  }
+
+  //fill board with pieces
+  int piecePos;
+  sf::Texture texture;
+  sf::Sprite sprite;
+  texture.setSmooth(true);
+
+  for(int i = 0; i<32; i++){
+    piecePos = pieces[i]->getPosition();
+    board.squares[piecePos] = pieces[i]->getID();
+    texture.loadFromFile(pieces[i]->getPath());
+    sprite.setTexture(texture);
+    sprite.setScale(((float)squaresize/spritesize),((float)squaresize/spritesize));
+    sprite.setPosition(board.coordinates[piecePos].x,board.coordinates[piecePos].y);
+    window.draw(sprite);
+  }
+
+
+}
