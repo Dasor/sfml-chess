@@ -18,6 +18,7 @@ typedef struct{
 
 void DrawBoard(int boardsize,sf::RenderWindow &window);
 BoardRep initBoard(int squaresize);
-void DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window, int squaresize);
+BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window, int squaresize);
+int ClosestSquare(int x , int y ,BoardRep board,int squaresize);
 
 #endif /* end of include guard:  */

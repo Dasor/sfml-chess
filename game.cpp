@@ -69,10 +69,10 @@ BoardRep initBoard(int squaresize){
   return board;
 }
 
-void DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window, int squaresize){
+BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window, int squaresize){
 
   for(int i = 0; i<64;i++){
-    board.squares[i] = empty;
+    board.squares[i] = 0;
   }
 
   //fill board with pieces
@@ -90,6 +90,17 @@ void DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window, int squa
     sprite.setPosition(board.coordinates[piecePos].x,board.coordinates[piecePos].y);
     window.draw(sprite);
   }
+  return board;
+}
 
-
+int ClosestSquare(int x , int y ,BoardRep board,int squaresize){
+  for(int i = 0; i<64; i++){
+    if(x - board.coordinates[i].x >= -100 && x - board.coordinates[i].x <= 100){
+      if(y - board.coordinates[i].y >= -100 && y - board.coordinates[i].y <= 100){
+        return i;
+      }
+    }
+  }
+  std::cout<<"Closest square not found\n";
+  return 0;
 }

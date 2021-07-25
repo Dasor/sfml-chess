@@ -1,10 +1,6 @@
 #ifndef PIECES_H
 #define PIECES_H
 
-enum pieces{
-  empty,pawn,knight,bishop,king,queen,rook
-};
-
 class Piece{
 protected:
   int ID;
@@ -12,7 +8,7 @@ protected:
   char Color;
   std::string Path;
 public:
-  Piece(int position,char color);
+  Piece(int position,char color,int id);
   virtual void Move() = 0;
   int getID();
   int getPosition();
@@ -22,37 +18,37 @@ public:
 
 class Pawn : public Piece{
 public:
-  Pawn(int position,char color);
+  Pawn(int position,char color,int id);
   void Move();
 };
 
 class Knight : public Piece{
 public:
-  Knight(int position,char color);
+  Knight(int position,char color,int id);
   void Move();
 };
 
 class Bishop : public Piece{
 public:
-  Bishop(int position,char color);
+  Bishop(int position,char color,int id);
   void Move();
 };
 
 class King : public Piece{
 public:
-  King(int position,char color);
+  King(int position,char color,int id);
   void Move();
 };
 
 class Queen : public Piece{
 public:
-  Queen(int position,char color);
+  Queen(int position,char color,int id);
   void Move();
 };
 
 class Rook : public Piece{
 public:
-  Rook(int position,char color);
+  Rook(int position,char color,int id);
   void Move();
 };
 
