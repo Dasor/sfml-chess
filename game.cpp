@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "pieces.hpp"
-#define spritesize 150
+#include "definitions.hpp"
+
 
 typedef struct{
   int x;
@@ -16,7 +17,7 @@ typedef struct{
 }BoardRep;
 
 
-void DrawBoard(int squaresize,sf::RenderWindow &window){
+void DrawBoard(sf::RenderWindow &window){
 
   sf::RectangleShape square;
   square.setSize(sf::Vector2f(squaresize, squaresize));
@@ -56,7 +57,7 @@ void DrawBoard(int squaresize,sf::RenderWindow &window){
 
 }
 
-BoardRep initBoard(int squaresize){
+BoardRep initBoard(){
   BoardRep board;
 
   for(int i = 0; i< 8;i++){
@@ -69,7 +70,7 @@ BoardRep initBoard(int squaresize){
   return board;
 }
 
-BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window, int squaresize){
+BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window){
 
   for(int i = 0; i<64;i++){
     board.squares[i] = 0;
@@ -93,7 +94,7 @@ BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window, int 
   return board;
 }
 
-int ClosestSquare(int x , int y ,BoardRep board,int squaresize){
+int ClosestSquare(int x , int y ,BoardRep board){
   for(int i = 0; i<64; i++){
     if(x - board.coordinates[i].x >= -100 && x - board.coordinates[i].x <= 100){
       if(y - board.coordinates[i].y >= -100 && y - board.coordinates[i].y <= 100){
@@ -104,3 +105,26 @@ int ClosestSquare(int x , int y ,BoardRep board,int squaresize){
   std::cout<<"Closest square not found\n";
   return 0;
 }
+
+/*void MovePieces(sf::Event event,BoardRep board,Piece **pieces,bool **PieceSelected){
+
+  int squareClicked1 ,squareClicked2;
+  int j = 0;
+  bool whitemove = true;
+
+  if(**PieceSelected == false){
+        squareClicked1 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
+        if(board.squares[squareClicked1] != 0){
+          **PieceSelected = true;
+      }
+  }else{
+        squareClicked2 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
+        while(board.squares[squareClicked1] != pieces[j]->getID()){
+          j++;
+        }
+        pieces[j]->Move(whitemove);
+        j = 0;
+        **PieceSelected = false;
+      }
+
+}*/

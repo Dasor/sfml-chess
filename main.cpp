@@ -2,19 +2,19 @@
 #include <iostream>
 #include "game.hpp"
 #include "pieces.hpp"
-#define boardsize 800
-
+#include "definitions.hpp"
 
 int main(){
   // create the window
   sf::RenderWindow window(sf::VideoMode(boardsize, boardsize), "Chess", sf::Style::Titlebar | sf::Style::Close);
-  int squaresize = boardsize/8;
-  BoardRep board = initBoard(squaresize);
+  BoardRep board = initBoard();
   Piece **pieces = InitPieces();
-  int squareClicked;
+  int squareClicked1 ,squareClicked2;
+  bool PieceSelected = false;
+  bool whitemove = true;
+  int j = 0;
   // run the program as long as the window is open
-  while (window.isOpen())
-  {
+  while (window.isOpen()){
     // check all the window's events that were triggered since the last iteration of the loop
     sf::Event event;
     while (window.pollEvent(event)){
@@ -23,24 +23,37 @@ int main(){
         window.close();
       }
 
-      if (event.type == sf::Event::MouseButtonPressed){
-        if (event.mouseButton.button == sf::Mouse::Left){
-          squareClicked = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board,squaresize);
-          if(board.squares[squareClicked] != 0){
-            for(int i = 0;i<32;i++){
-              if(board.squares[squareClicked] == pieces[i]->getID()){
-                pieces[i]->Move();
-              }
+
+      if(PieceSelected == false){
+        if (event.type == sf::Event::MouseButtonPressed){
+          if (event.mouseButton.button == sf::Mouse::Left){
+            squareClicked1 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
+            if(board.squares[squareClicked1] != 0){
+              PieceSelected = true;
             }
           }
         }
+      }else{
+        if (event.type == sf::Event::MouseButtonPressed){
+          if (event.mouseButton.button == sf::Mouse::Left){
+            squareClicked2 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
+            while(board.squares[squareClicked1] != pieces[j]->getID()){
+              j++;
+            }
+            pieces[j]->Move(whitemove);
+            j = 0;
+            PieceSelected = false;
+          }
+        }
       }
+
     }
+
 
     window.clear(sf::Color::Black);
 
-    DrawBoard(squaresize,window);
-    board = DrawPieces(pieces,board,window,squaresize);
+    DrawBoard(window);
+    board = DrawPieces(pieces,board,window);
 
     window.display();
 

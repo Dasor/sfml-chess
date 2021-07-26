@@ -3,6 +3,7 @@
 #include "pieces.hpp"
 
 
+
 typedef struct{
   int x;
   int y;
@@ -16,9 +17,10 @@ typedef struct{
 }BoardRep;
 
 
-void DrawBoard(int boardsize,sf::RenderWindow &window);
-BoardRep initBoard(int squaresize);
-BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window, int squaresize);
-int ClosestSquare(int x , int y ,BoardRep board,int squaresize);
+void DrawBoard(sf::RenderWindow &window);
+BoardRep initBoard();
+BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window);
+int ClosestSquare(int x , int y ,BoardRep board);
+//void MovePieces(sf::Event event,BoardRep board,Piece **pieces,bool **PieceSelected);
 
 #endif /* end of include guard:  */

@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "pieces.hpp"
+#include "definitions.hpp"
 
 
 Piece::Piece(int position,char color,int id){
@@ -9,7 +10,7 @@ Piece::Piece(int position,char color,int id){
   ID = id;
 }
 
-void Piece::Move(){}
+void Piece::Move(bool whitemove){}
 
 int Piece::getID(){
   return ID;
@@ -37,11 +38,13 @@ Pawn::Pawn(int position,char color,int id)
   }
 }
 
-void Pawn::Move(){
-  if(Color == 'b'){
-    Position += 8;
-  }else{
-    Position -= 8;
+void Pawn::Move(bool whitemove){
+  if(whitemove == true && Color == 'w'){
+    if(Color == 'b'){
+      Position += 8;
+    }else{
+      Position -= 8;
+    }
   }
 }
 
@@ -55,7 +58,7 @@ Knight::Knight(int position,char color,int id)
   }
 }
 
-void Knight::Move(){
+void Knight::Move(bool whitemove){
   Position -= 15;
 }
 
@@ -69,7 +72,7 @@ Bishop::Bishop(int position,char color,int id)
   }
 }
 
-void Bishop::Move(){
+void Bishop::Move(bool whitemove){
   Position -= 7;
 }
 
@@ -83,7 +86,7 @@ King::King(int position,char color,int id)
   }
 }
 
-void King::Move(){
+void King::Move(bool whitemove){
   Position -= 8;
 }
 
@@ -97,7 +100,7 @@ Queen::Queen(int position,char color,int id)
   }
 }
 
-void Queen::Move(){
+void Queen::Move(bool whitemove){
   Position -= 7;
 }
 
@@ -111,7 +114,7 @@ Rook::Rook(int position,char color,int id)
   }
 }
 
-void Rook::Move(){
+void Rook::Move(bool whitemove){
   Position -= 8;
 }
 
