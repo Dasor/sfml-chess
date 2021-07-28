@@ -11,7 +11,8 @@ int main(){
   Piece **pieces = InitPieces();
   int squareClicked1 ,squareClicked2;
   bool PieceSelected = false;
-  bool whitemove = true;
+  bool *ToMove = new bool;
+  *ToMove = white;
   int j = 0;
   // run the program as long as the window is open
   while (window.isOpen()){
@@ -24,29 +25,27 @@ int main(){
       }
 
 
-      if(PieceSelected == false){
-        if (event.type == sf::Event::MouseButtonPressed){
-          if (event.mouseButton.button == sf::Mouse::Left){
+      if (event.type == sf::Event::MouseButtonPressed){
+        if (event.mouseButton.button == sf::Mouse::Left){
+          if(PieceSelected == false){
             squareClicked1 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
             if(board.squares[squareClicked1] != 0){
               PieceSelected = true;
             }
-          }
-        }
-      }else{
-        if (event.type == sf::Event::MouseButtonPressed){
-          if (event.mouseButton.button == sf::Mouse::Left){
+          }else{
             squareClicked2 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
             while(board.squares[squareClicked1] != pieces[j]->getID()){
               j++;
             }
-            pieces[j]->Move(whitemove);
+            if(pieces[j]->getColor() == 'w' && *ToMove == white || pieces[j]->getColor() == 'b' && *ToMove == black){
+              pieces[j]->Move();
+              ManageTurns(&ToMove);
+            }
             j = 0;
             PieceSelected = false;
           }
         }
       }
-
     }
 
 

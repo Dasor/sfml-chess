@@ -10,7 +10,7 @@ Piece::Piece(int position,char color,int id){
   ID = id;
 }
 
-void Piece::Move(bool whitemove){}
+void Piece::Move(){}
 
 int Piece::getID(){
   return ID;
@@ -38,13 +38,11 @@ Pawn::Pawn(int position,char color,int id)
   }
 }
 
-void Pawn::Move(bool whitemove){
-  if(whitemove == true && Color == 'w'){
+void Pawn::Move(){
     if(Color == 'b'){
       Position += 8;
     }else{
       Position -= 8;
-    }
   }
 }
 
@@ -58,7 +56,7 @@ Knight::Knight(int position,char color,int id)
   }
 }
 
-void Knight::Move(bool whitemove){
+void Knight::Move(){
   Position -= 15;
 }
 
@@ -72,7 +70,7 @@ Bishop::Bishop(int position,char color,int id)
   }
 }
 
-void Bishop::Move(bool whitemove){
+void Bishop::Move(){
   Position -= 7;
 }
 
@@ -86,7 +84,7 @@ King::King(int position,char color,int id)
   }
 }
 
-void King::Move(bool whitemove){
+void King::Move(){
   Position -= 8;
 }
 
@@ -100,7 +98,7 @@ Queen::Queen(int position,char color,int id)
   }
 }
 
-void Queen::Move(bool whitemove){
+void Queen::Move(){
   Position -= 7;
 }
 
@@ -114,7 +112,7 @@ Rook::Rook(int position,char color,int id)
   }
 }
 
-void Rook::Move(bool whitemove){
+void Rook::Move(){
   Position -= 8;
 }
 
@@ -149,4 +147,14 @@ Piece **InitPieces(){
   pieces[31] = new Queen(4,'b',32);
 
   return pieces;
+}
+
+void ManageTurns(bool **ToMove){
+
+  if(**ToMove == white){
+    **ToMove = black;
+  }else{
+    **ToMove = white;
+  }
+
 }

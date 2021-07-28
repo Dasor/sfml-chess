@@ -105,26 +105,3 @@ int ClosestSquare(int x , int y ,BoardRep board){
   std::cout<<"Closest square not found\n";
   return 0;
 }
-
-/*void MovePieces(sf::Event event,BoardRep board,Piece **pieces,bool **PieceSelected){
-
-  int squareClicked1 ,squareClicked2;
-  int j = 0;
-  bool whitemove = true;
-
-  if(**PieceSelected == false){
-        squareClicked1 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
-        if(board.squares[squareClicked1] != 0){
-          **PieceSelected = true;
-      }
-  }else{
-        squareClicked2 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
-        while(board.squares[squareClicked1] != pieces[j]->getID()){
-          j++;
-        }
-        pieces[j]->Move(whitemove);
-        j = 0;
-        **PieceSelected = false;
-      }
-
-}*/

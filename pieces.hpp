@@ -9,7 +9,7 @@ protected:
   std::string Path;
 public:
   Piece(int position,char color,int id);
-  virtual void Move(bool whitemove) = 0;
+  virtual void Move() = 0;
   int getID();
   int getPosition();
   char getColor();
@@ -19,39 +19,40 @@ public:
 class Pawn : public Piece{
 public:
   Pawn(int position,char color,int id);
-  void Move(bool whitemove);
+  void Move();
 };
 
 class Knight : public Piece{
 public:
   Knight(int position,char color,int id);
-  void Move(bool whitemove);
+  void Move();
 };
 
 class Bishop : public Piece{
 public:
   Bishop(int position,char color,int id);
-  void Move(bool whitemove);
+  void Move();
 };
 
 class King : public Piece{
 public:
   King(int position,char color,int id);
-  void Move(bool whitemove);
+  void Move();
 };
 
 class Queen : public Piece{
 public:
   Queen(int position,char color,int id);
-  void Move(bool whitemove);
+  void Move();
 };
 
 class Rook : public Piece{
 public:
   Rook(int position,char color,int id);
-  void Move(bool whitemove);
+  void Move();
 };
 
 Piece **InitPieces();
+void ManageTurns(bool **ToMove);
 
 #endif /* end of include guard: PIECES_H */
