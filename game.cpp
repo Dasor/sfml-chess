@@ -1,20 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "pieces.hpp"
 #include "definitions.hpp"
-
-
-typedef struct{
-  int x;
-  int y;
-}Coords;
-
-typedef struct{
-
-  int squares[64];
-  Coords coordinates[64];
-
-}BoardRep;
+#include "main.hpp"
 
 
 void DrawBoard(sf::RenderWindow &window){
@@ -22,9 +9,9 @@ void DrawBoard(sf::RenderWindow &window){
   sf::RectangleShape square;
   square.setSize(sf::Vector2f(squaresize, squaresize));
   sf::Texture boardtexture1;
-  boardtexture1.loadFromFile("texture1.jpg");
+  boardtexture1.loadFromFile("pictures/texture1.jpg");
   sf::Texture boardtexture2;
-  boardtexture2.loadFromFile("texture2.jpg");
+  boardtexture2.loadFromFile("pictures/texture2.jpg");
   short evenline = 0;
 
   square.setTexture(&boardtexture1);
@@ -84,12 +71,17 @@ BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window){
 
   for(int i = 0; i<32; i++){
     piecePos = pieces[i]->getPosition();
+    //std::cout << "PiecePos:" << piecePos <<'\n';
     board.squares[piecePos] = pieces[i]->getID();
-    texture.loadFromFile(pieces[i]->getPath());
-    sprite.setTexture(texture);
-    sprite.setScale(((float)squaresize/spritesize),((float)squaresize/spritesize));
-    sprite.setPosition(board.coordinates[piecePos].x,board.coordinates[piecePos].y);
-    window.draw(sprite);
+    //std::cout << "Board:" << board.squares[piecePos] << '\n';
+    //std::cout << "PieceID:" << pieces[i]->getID() << '\n';
+    if(pieces[i]->getID() != 0){
+      texture.loadFromFile(pieces[i]->getPath());
+      sprite.setTexture(texture);
+      sprite.setScale(((float)squaresize/spritesize),((float)squaresize/spritesize));
+      sprite.setPosition(board.coordinates[piecePos].x,board.coordinates[piecePos].y);
+      window.draw(sprite);
+    }
   }
   return board;
 }

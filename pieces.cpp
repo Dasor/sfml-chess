@@ -1,8 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "pieces.hpp"
+#include "main.hpp"
 #include "definitions.hpp"
-
 
 Piece::Piece(int position,char color,int id){
   Position = position;
@@ -10,7 +9,7 @@ Piece::Piece(int position,char color,int id){
   ID = id;
 }
 
-void Piece::Move(int SquareToMove){}
+Piece **Piece::Move(int SquareToMove,BoardRep board,Piece **pieces){return pieces;}
 
 int Piece::getID(){
   return ID;
@@ -28,101 +27,130 @@ std::string Piece::getPath(){
   return Path;
 }
 
+void Piece::setID(int id){
+  ID = id;
+}
+
+void Piece::setPosition(int position){
+  Position = position;
+}
+
 Pawn::Pawn(int position,char color,int id)
 :Piece(position,color,id)
 {
   if(color == 'w'){
-    Path = "pieces/wpawn.png";
+    Path = "pictures/wpawn.png";
   }else{
-    Path = "pieces/bpawn.png";
+    Path = "pictures/bpawn.png";
   }
 }
 
-void Pawn::Move(int SquareToMove){
+Piece **Pawn::Move(int SquareToMove,BoardRep board, Piece **pieces){
   if(Color == 'w'){
-    if(Position-SquareToMove == 8){
+    if(Position-SquareToMove == 8 && board.squares[Position-8] == 0){
       Position -= 8;
-    }else if(Position - SquareToMove == 16 && Position >=48 && Position <= 55){
+    }else if(Position - SquareToMove == 16 && Position >=48 && Position <= 55 && board.squares[Position-16] == 0 && board.squares[Position-8] == 0){
       Position -= 16;
+    }else if(Position - SquareToMove == 7 && board.squares[Position-7] != 0){
+      pieces[FindPiece(Position-7,board,pieces)]->setPosition(64);
+      pieces[FindPiece(Position-7,board,pieces)]->setID(0);
+      Position -= 7;
+    }else if(Position - SquareToMove == 9 && board.squares[Position-9] != 0){
+      pieces[FindPiece(Position-9,board,pieces)]->setPosition(64);
+      pieces[FindPiece(Position-9,board,pieces)]->setID(0);
+      Position -= 9;
     }
   }else{
-    if(Position-SquareToMove == -8){
+    if(Position-SquareToMove == -8 && board.squares[Position+8] == 0){
       Position += 8;
-    }else if(Position - SquareToMove == -16 && Position >=8 && Position <= 15){
+    }else if(Position - SquareToMove == -16 && Position >=8 && Position <= 15 && board.squares[Position+16] == 0 && board.squares[Position+16] == 0){
       Position += 16;
+    }else if(Position - SquareToMove == -7 && board.squares[Position+7] != 0){
+      pieces[FindPiece(Position+7,board,pieces)]->setPosition(64);
+      pieces[FindPiece(Position+7,board,pieces)]->setID(0);
+      Position += 7;
+    }else if(Position - SquareToMove == -9 && board.squares[Position+9] != 0){
+      pieces[FindPiece(Position+9,board,pieces)]->setPosition(64);
+      pieces[FindPiece(Position+9,board,pieces)]->setID(0);
+      Position += 9;
     }
   }
-
+return pieces;
 }
 
 Knight::Knight(int position,char color,int id)
 :Piece(position,color,id)
 {
   if(color == 'w'){
-    Path = "pieces/wknight.png";
+    Path = "pictures/wknight.png";
   }else{
-    Path = "pieces/bknight.png";
+    Path = "pictures/bknight.png";
   }
 }
 
-void Knight::Move(int SquareToMove){
+Piece **Knight::Move(int SquareToMove,BoardRep board,Piece **pieces){
   Position -= 15;
+  return pieces;
 }
 
 Bishop::Bishop(int position,char color,int id)
 :Piece(position,color,id)
 {
   if(color == 'w'){
-    Path = "pieces/wbishop.png";
+    Path = "pictures/wbishop.png";
   }else{
-    Path = "pieces/bbishop.png";
+    Path = "pictures/bbishop.png";
   }
 }
 
-void Bishop::Move(int SquareToMove){
+Piece **Bishop::Move(int SquareToMove,BoardRep board,Piece **pieces){
   Position -= 7;
+  return pieces;
 }
 
 King::King(int position,char color,int id)
 :Piece(position,color,id)
 {
   if(color == 'w'){
-    Path = "pieces/wking.png";
+    Path = "pictures/wking.png";
   }else{
-    Path = "pieces/bking.png";
+    Path = "pictures/bking.png";
   }
 }
 
-void King::Move(int SquareToMove){
+Piece **King::Move(int SquareToMove,BoardRep board,Piece **pieces){
   Position -= 8;
+  return pieces;
 }
 
 Queen::Queen(int position,char color,int id)
 :Piece(position,color,id)
 {
   if(color == 'w'){
-    Path = "pieces/wqueen.png";
+    Path = "pictures/wqueen.png";
   }else{
-    Path = "pieces/bqueen.png";
+    Path = "pictures/bqueen.png";
   }
 }
 
-void Queen::Move(int SquareToMove){
+Piece **Queen::Move(int SquareToMove,BoardRep board,Piece **pieces){
   Position -= 7;
+  return pieces;
 }
 
 Rook::Rook(int position,char color,int id)
 :Piece(position,color,id)
 {
   if(color == 'w'){
-    Path = "pieces/wrook.png";
+    Path = "pictures/wrook.png";
   }else{
-    Path = "pieces/brook.png";
+    Path = "pictures/brook.png";
   }
 }
 
-void Rook::Move(int SquareToMove){
+Piece **Rook::Move(int SquareToMove,BoardRep board,Piece **pieces){
   Position -= 8;
+  return pieces;
 }
 
 
@@ -166,4 +194,12 @@ void ManageTurns(bool **ToMove){
     **ToMove = white;
   }
 
+}
+
+int FindPiece(int index,BoardRep board, Piece **pieces){
+  int j = 0;
+  while(board.squares[index] != pieces[j]->getID()){
+    j++;
+  }
+  return j;
 }

@@ -7,4 +7,5 @@
 #define black false
 #define white true
 
+
 #endif /* end of include guard: DEFINITIONS_H */

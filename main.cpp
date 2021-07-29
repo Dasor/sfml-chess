@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "game.hpp"
-#include "pieces.hpp"
+#include "main.hpp"
 #include "definitions.hpp"
 
 int main(){
@@ -34,17 +33,14 @@ int main(){
             }
           }else{
             squareClicked2 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
-            while(board.squares[squareClicked1] != pieces[j]->getID()){
-              j++;
-            }
+            j = FindPiece(squareClicked1,board,pieces);
             if(pieces[j]->getColor() == 'w' && *ToMove == white || pieces[j]->getColor() == 'b' && *ToMove == black){
               legalmove = pieces[j]->getPosition(); //checks if positions changed
-              pieces[j]->Move(squareClicked2);
+              pieces = pieces[j]->Move(squareClicked2,board,pieces);
               if(pieces[j]->getPosition() != legalmove){
                 ManageTurns(&ToMove);
               }
             }
-            j = 0;
             PieceSelected = false;
           }
         }
