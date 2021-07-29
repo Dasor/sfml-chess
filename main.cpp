@@ -9,7 +9,7 @@ int main(){
   sf::RenderWindow window(sf::VideoMode(boardsize, boardsize), "Chess", sf::Style::Titlebar | sf::Style::Close);
   BoardRep board = initBoard();
   Piece **pieces = InitPieces();
-  int squareClicked1 ,squareClicked2;
+  int squareClicked1 ,squareClicked2,legalmove;
   bool PieceSelected = false;
   bool *ToMove = new bool;
   *ToMove = white;
@@ -24,7 +24,7 @@ int main(){
         window.close();
       }
 
-
+      //game core
       if (event.type == sf::Event::MouseButtonPressed){
         if (event.mouseButton.button == sf::Mouse::Left){
           if(PieceSelected == false){
@@ -38,14 +38,18 @@ int main(){
               j++;
             }
             if(pieces[j]->getColor() == 'w' && *ToMove == white || pieces[j]->getColor() == 'b' && *ToMove == black){
-              pieces[j]->Move();
-              ManageTurns(&ToMove);
+              legalmove = pieces[j]->getPosition(); //checks if positions changed
+              pieces[j]->Move(squareClicked2);
+              if(pieces[j]->getPosition() != legalmove){
+                ManageTurns(&ToMove);
+              }
             }
             j = 0;
             PieceSelected = false;
           }
         }
       }
+
     }
 
 

@@ -10,7 +10,7 @@ Piece::Piece(int position,char color,int id){
   ID = id;
 }
 
-void Piece::Move(){}
+void Piece::Move(int SquareToMove){}
 
 int Piece::getID(){
   return ID;
@@ -38,12 +38,21 @@ Pawn::Pawn(int position,char color,int id)
   }
 }
 
-void Pawn::Move(){
-    if(Color == 'b'){
-      Position += 8;
-    }else{
+void Pawn::Move(int SquareToMove){
+  if(Color == 'w'){
+    if(Position-SquareToMove == 8){
       Position -= 8;
+    }else if(Position - SquareToMove == 16 && Position >=48 && Position <= 55){
+      Position -= 16;
+    }
+  }else{
+    if(Position-SquareToMove == -8){
+      Position += 8;
+    }else if(Position - SquareToMove == -16 && Position >=8 && Position <= 15){
+      Position += 16;
+    }
   }
+
 }
 
 Knight::Knight(int position,char color,int id)
@@ -56,7 +65,7 @@ Knight::Knight(int position,char color,int id)
   }
 }
 
-void Knight::Move(){
+void Knight::Move(int SquareToMove){
   Position -= 15;
 }
 
@@ -70,7 +79,7 @@ Bishop::Bishop(int position,char color,int id)
   }
 }
 
-void Bishop::Move(){
+void Bishop::Move(int SquareToMove){
   Position -= 7;
 }
 
@@ -84,7 +93,7 @@ King::King(int position,char color,int id)
   }
 }
 
-void King::Move(){
+void King::Move(int SquareToMove){
   Position -= 8;
 }
 
@@ -98,7 +107,7 @@ Queen::Queen(int position,char color,int id)
   }
 }
 
-void Queen::Move(){
+void Queen::Move(int SquareToMove){
   Position -= 7;
 }
 
@@ -112,7 +121,7 @@ Rook::Rook(int position,char color,int id)
   }
 }
 
-void Rook::Move(){
+void Rook::Move(int SquareToMove){
   Position -= 8;
 }
 
