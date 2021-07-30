@@ -52,30 +52,38 @@ Piece **Pawn::Move(int SquareToMove,BoardRep board, Piece **pieces){
     }else if(Position - SquareToMove == 16 && Position >=48 && Position <= 55 && board.squares[Position-16] == 0 && board.squares[Position-8] == 0){
       Position -= 16;
     }else if(Position - SquareToMove == 7 && board.squares[Position-7] != 0){
-      pieces[FindPiece(Position-7,board,pieces)]->setPosition(64);
-      pieces[FindPiece(Position-7,board,pieces)]->setID(0);
-      Position -= 7;
+      if(Color == 'w' && board.squares[Position-7] >= 17 || Color == 'b' && board.squares[Position-7] <= 16){
+        pieces[FindPiece(Position-7,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position-7,board,pieces)]->setID(0);
+        Position -= 7;
+      }
     }else if(Position - SquareToMove == 9 && board.squares[Position-9] != 0){
-      pieces[FindPiece(Position-9,board,pieces)]->setPosition(64);
-      pieces[FindPiece(Position-9,board,pieces)]->setID(0);
-      Position -= 9;
+      if(Color == 'w' && board.squares[Position-9] >= 17 || Color == 'b' && board.squares[Position-9] <= 16){
+        pieces[FindPiece(Position-9,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position-9,board,pieces)]->setID(0);
+        Position -= 9;
+      }
     }
   }else{
     if(Position-SquareToMove == -8 && board.squares[Position+8] == 0){
       Position += 8;
-    }else if(Position - SquareToMove == -16 && Position >=8 && Position <= 15 && board.squares[Position+16] == 0 && board.squares[Position+16] == 0){
+    }else if(Position - SquareToMove == -16 && Position >=8 && Position <= 15 && board.squares[Position+8] == 0 && board.squares[Position+16] == 0){
       Position += 16;
     }else if(Position - SquareToMove == -7 && board.squares[Position+7] != 0){
-      pieces[FindPiece(Position+7,board,pieces)]->setPosition(64);
-      pieces[FindPiece(Position+7,board,pieces)]->setID(0);
-      Position += 7;
+      if(Color == 'w' && board.squares[Position+7] >= 17 || Color == 'b' && board.squares[Position+7] <= 16){
+        pieces[FindPiece(Position+7,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position+7,board,pieces)]->setID(0);
+        Position += 7;
+      }
     }else if(Position - SquareToMove == -9 && board.squares[Position+9] != 0){
-      pieces[FindPiece(Position+9,board,pieces)]->setPosition(64);
-      pieces[FindPiece(Position+9,board,pieces)]->setID(0);
-      Position += 9;
+      if(Color == 'w' && board.squares[Position+9] >= 17 || Color == 'b' && board.squares[Position+9] <= 16){
+        pieces[FindPiece(Position+9,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position+9,board,pieces)]->setID(0);
+        Position += 9;
+      }
     }
   }
-return pieces;
+  return pieces;
 }
 
 Knight::Knight(int position,char color,int id)
@@ -89,8 +97,72 @@ Knight::Knight(int position,char color,int id)
 }
 
 Piece **Knight::Move(int SquareToMove,BoardRep board,Piece **pieces){
-  Position -= 15;
+  if(Position-SquareToMove == 17 && board.squares[Position-17] == 0 || Color == 'w' && board.squares[Position-17] > 16 || Color == 'b' && board.squares[Position-17] < 17 && board.squares[Position-17] > 0){
+    if(Color == 'b' && board.squares[Position-17] <= 16 || Color == 'w' && board.squares[Position-17] >= 17 && board.squares[Position-17] > 0){
+      pieces[FindPiece(Position-17,board,pieces)]->setPosition(64);
+      pieces[FindPiece(Position-17,board,pieces)]->setID(0);
+    }
+    Position -=17;
+  }else if(Position-SquareToMove == 15 && board.squares[Position-15] == 0 || Color == 'w' && board.squares[Position-15] > 16 || Color == 'b' && board.squares[Position-15] < 17 && board.squares[Position-15] > 0){
+    if(board.squares[Position-15] != 0){
+      if(Color == 'w' && board.squares[Position-15] >= 17 || Color == 'b' && board.squares[Position-15] <= 16){
+        pieces[FindPiece(Position-15,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position-15,board,pieces)]->setID(0);
+      }
+    }
+    Position -=15;
+  }else if(Position-SquareToMove == 10 && board.squares[Position-10] == 0 || Color == 'w' && board.squares[Position-10] > 16 || Color == 'b' && board.squares[Position-10] < 17 && board.squares[Position-10] > 0){
+    if(board.squares[Position-10] != 0){
+      if(Color == 'w' && board.squares[Position-10] >= 17 || Color == 'b' && board.squares[Position-10] <= 16){
+        pieces[FindPiece(Position-10,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position-10,board,pieces)]->setID(0);
+      }
+    }
+    Position -=10;
+  }else if(Position-SquareToMove == 6 && board.squares[Position-6] == 0 || Color == 'w' && board.squares[Position-6] > 16 || Color == 'b' && board.squares[Position-6] < 17 && board.squares[Position-6] > 0){
+    if(board.squares[Position-6] != 0){
+      if(Color == 'w' && board.squares[Position-6] >= 17 || Color == 'b' && board.squares[Position-6] <= 16){
+        pieces[FindPiece(Position-6,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position-6,board,pieces)]->setID(0);
+      }
+    }
+    Position -=6;
+  }else if(Position-SquareToMove == -6 && board.squares[Position+6] == 0 || Color == 'w' && board.squares[Position+6] > 16 || Color == 'b' && board.squares[Position+6] < 17  && board.squares[Position+6] > 0){
+    if(board.squares[Position+6] != 0){
+      if(Color == 'w' && board.squares[Position+6] >= 17 || Color == 'b' && board.squares[Position+6] <= 16){
+        pieces[FindPiece(Position+6,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position+6,board,pieces)]->setID(0);
+      }
+    }
+    Position +=6;
+  }else if(Position-SquareToMove == -17 && board.squares[Position+17] == 0 || Color == 'w' && board.squares[Position+17] > 16 || Color == 'b' && board.squares[Position+17] < 17 && Color == 'b' && board.squares[Position+17] > 0){
+    if(board.squares[Position+17] != 0){
+      if(Color == 'w' && board.squares[Position+17] >= 17 || Color == 'b' && board.squares[Position+17] <= 16){
+        pieces[FindPiece(Position+17,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position+17,board,pieces)]->setID(0);
+      }
+    }
+    Position +=17;
+  }
+  else if(Position-SquareToMove == -15 && board.squares[Position+15] == 0 || Color == 'w' && board.squares[Position+15] > 16 || Color == 'b' && board.squares[Position+15] < 17 && board.squares[Position+15] > 0){
+    if(board.squares[Position+15] != 0){
+      if(Color == 'w' && board.squares[Position+15] >= 17 || Color == 'b' && board.squares[Position+15] <= 16){
+        pieces[FindPiece(Position+15,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position+15,board,pieces)]->setID(0);
+      }
+    }
+    Position +=15;
+  }else if(Position-SquareToMove == -10 && board.squares[Position+10] == 0 || Color == 'w' && board.squares[Position+10] > 16 || Color == 'b' && board.squares[Position+10] < 17 && board.squares[Position+15] > 0){
+    if(board.squares[Position+10] != 0){
+      if(Color == 'w' && board.squares[Position+10] >= 17 || Color == 'b' && board.squares[Position+10] <= 16){
+        pieces[FindPiece(Position+10,board,pieces)]->setPosition(64);
+        pieces[FindPiece(Position+10,board,pieces)]->setID(0);
+      }
+    }
+    Position +=10;
+  }
   return pieces;
+
 }
 
 Bishop::Bishop(int position,char color,int id)
