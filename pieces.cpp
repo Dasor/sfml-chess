@@ -46,18 +46,19 @@ Pawn::Pawn(int position,char color,int id)
 }
 
 Piece **Pawn::Move(int SquareToMove,BoardRep board, Piece **pieces){
+  int Distance = Position - SquareToMove;
   if(Color == 'w'){
-    if(Position-SquareToMove == 8 && board.squares[Position-8] == 0){
+    if(Distance == 8 && board.squares[Position-8] == 0){
       Position -= 8;
-    }else if(Position - SquareToMove == 16 && Position >=48 && Position <= 55 && board.squares[Position-16] == 0 && board.squares[Position-8] == 0){
+    }else if(Distance == 16 && Position >=48 && Position <= 55 && board.squares[Position-16] == 0 && board.squares[Position-8] == 0){
       Position -= 16;
-    }else if(Position - SquareToMove == 7 && board.squares[Position-7] != 0){
+    }else if(Distance == 7 && board.squares[Position-7] != 0){
       if(Color == 'w' && board.squares[Position-7] >= 17 || Color == 'b' && board.squares[Position-7] <= 16){
         pieces[FindPiece(Position-7,board,pieces)]->setPosition(64);
         pieces[FindPiece(Position-7,board,pieces)]->setID(0);
         Position -= 7;
       }
-    }else if(Position - SquareToMove == 9 && board.squares[Position-9] != 0){
+    }else if(Distance == 9 && board.squares[Position-9] != 0){
       if(Color == 'w' && board.squares[Position-9] >= 17 || Color == 'b' && board.squares[Position-9] <= 16){
         pieces[FindPiece(Position-9,board,pieces)]->setPosition(64);
         pieces[FindPiece(Position-9,board,pieces)]->setID(0);
@@ -65,17 +66,17 @@ Piece **Pawn::Move(int SquareToMove,BoardRep board, Piece **pieces){
       }
     }
   }else{
-    if(Position-SquareToMove == -8 && board.squares[Position+8] == 0){
+    if(Distance == -8 && board.squares[Position+8] == 0){
       Position += 8;
-    }else if(Position - SquareToMove == -16 && Position >=8 && Position <= 15 && board.squares[Position+8] == 0 && board.squares[Position+16] == 0){
+    }else if(Distance == -16 && Position >=8 && Position <= 15 && board.squares[Position+8] == 0 && board.squares[Position+16] == 0){
       Position += 16;
-    }else if(Position - SquareToMove == -7 && board.squares[Position+7] != 0){
+    }else if(Distance == -7 && board.squares[Position+7] != 0){
       if(Color == 'w' && board.squares[Position+7] >= 17 || Color == 'b' && board.squares[Position+7] <= 16){
         pieces[FindPiece(Position+7,board,pieces)]->setPosition(64);
         pieces[FindPiece(Position+7,board,pieces)]->setID(0);
         Position += 7;
       }
-    }else if(Position - SquareToMove == -9 && board.squares[Position+9] != 0){
+    }else if(Distance == -9 && board.squares[Position+9] != 0){
       if(Color == 'w' && board.squares[Position+9] >= 17 || Color == 'b' && board.squares[Position+9] <= 16){
         pieces[FindPiece(Position+9,board,pieces)]->setPosition(64);
         pieces[FindPiece(Position+9,board,pieces)]->setID(0);
@@ -97,69 +98,17 @@ Knight::Knight(int position,char color,int id)
 }
 
 Piece **Knight::Move(int SquareToMove,BoardRep board,Piece **pieces){
-  if(Position-SquareToMove == 17 && board.squares[Position-17] == 0 || Color == 'w' && board.squares[Position-17] > 16 || Color == 'b' && board.squares[Position-17] < 17 && board.squares[Position-17] > 0){
-    if(Color == 'b' && board.squares[Position-17] <= 16 || Color == 'w' && board.squares[Position-17] >= 17 && board.squares[Position-17] > 0){
-      pieces[FindPiece(Position-17,board,pieces)]->setPosition(64);
-      pieces[FindPiece(Position-17,board,pieces)]->setID(0);
+  int Distance = Position - SquareToMove;
+  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+    if(Distance == 17 || Distance == 15 || Distance == 10 || Distance == 6 || Distance == -6 || Distance == -17 || Distance == -15 || Distance ==-10 ){
+      Position = SquareToMove;
     }
-    Position -=17;
-  }else if(Position-SquareToMove == 15 && board.squares[Position-15] == 0 || Color == 'w' && board.squares[Position-15] > 16 || Color == 'b' && board.squares[Position-15] < 17 && board.squares[Position-15] > 0){
-    if(board.squares[Position-15] != 0){
-      if(Color == 'w' && board.squares[Position-15] >= 17 || Color == 'b' && board.squares[Position-15] <= 16){
-        pieces[FindPiece(Position-15,board,pieces)]->setPosition(64);
-        pieces[FindPiece(Position-15,board,pieces)]->setID(0);
-      }
-    }
-    Position -=15;
-  }else if(Position-SquareToMove == 10 && board.squares[Position-10] == 0 || Color == 'w' && board.squares[Position-10] > 16 || Color == 'b' && board.squares[Position-10] < 17 && board.squares[Position-10] > 0){
-    if(board.squares[Position-10] != 0){
-      if(Color == 'w' && board.squares[Position-10] >= 17 || Color == 'b' && board.squares[Position-10] <= 16){
-        pieces[FindPiece(Position-10,board,pieces)]->setPosition(64);
-        pieces[FindPiece(Position-10,board,pieces)]->setID(0);
-      }
-    }
-    Position -=10;
-  }else if(Position-SquareToMove == 6 && board.squares[Position-6] == 0 || Color == 'w' && board.squares[Position-6] > 16 || Color == 'b' && board.squares[Position-6] < 17 && board.squares[Position-6] > 0){
-    if(board.squares[Position-6] != 0){
-      if(Color == 'w' && board.squares[Position-6] >= 17 || Color == 'b' && board.squares[Position-6] <= 16){
-        pieces[FindPiece(Position-6,board,pieces)]->setPosition(64);
-        pieces[FindPiece(Position-6,board,pieces)]->setID(0);
-      }
-    }
-    Position -=6;
-  }else if(Position-SquareToMove == -6 && board.squares[Position+6] == 0 || Color == 'w' && board.squares[Position+6] > 16 || Color == 'b' && board.squares[Position+6] < 17  && board.squares[Position+6] > 0){
-    if(board.squares[Position+6] != 0){
-      if(Color == 'w' && board.squares[Position+6] >= 17 || Color == 'b' && board.squares[Position+6] <= 16){
-        pieces[FindPiece(Position+6,board,pieces)]->setPosition(64);
-        pieces[FindPiece(Position+6,board,pieces)]->setID(0);
-      }
-    }
-    Position +=6;
-  }else if(Position-SquareToMove == -17 && board.squares[Position+17] == 0 || Color == 'w' && board.squares[Position+17] > 16 || Color == 'b' && board.squares[Position+17] < 17 && Color == 'b' && board.squares[Position+17] > 0){
-    if(board.squares[Position+17] != 0){
-      if(Color == 'w' && board.squares[Position+17] >= 17 || Color == 'b' && board.squares[Position+17] <= 16){
-        pieces[FindPiece(Position+17,board,pieces)]->setPosition(64);
-        pieces[FindPiece(Position+17,board,pieces)]->setID(0);
-      }
-    }
-    Position +=17;
   }
-  else if(Position-SquareToMove == -15 && board.squares[Position+15] == 0 || Color == 'w' && board.squares[Position+15] > 16 || Color == 'b' && board.squares[Position+15] < 17 && board.squares[Position+15] > 0){
-    if(board.squares[Position+15] != 0){
-      if(Color == 'w' && board.squares[Position+15] >= 17 || Color == 'b' && board.squares[Position+15] <= 16){
-        pieces[FindPiece(Position+15,board,pieces)]->setPosition(64);
-        pieces[FindPiece(Position+15,board,pieces)]->setID(0);
-      }
+  if(board.squares[SquareToMove] != 0){
+    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+      pieces[FindPiece(SquareToMove,board,pieces)]->setPosition(64);
+      pieces[FindPiece(SquareToMove,board,pieces)]->setID(0);
     }
-    Position +=15;
-  }else if(Position-SquareToMove == -10 && board.squares[Position+10] == 0 || Color == 'w' && board.squares[Position+10] > 16 || Color == 'b' && board.squares[Position+10] < 17 && board.squares[Position+15] > 0){
-    if(board.squares[Position+10] != 0){
-      if(Color == 'w' && board.squares[Position+10] >= 17 || Color == 'b' && board.squares[Position+10] <= 16){
-        pieces[FindPiece(Position+10,board,pieces)]->setPosition(64);
-        pieces[FindPiece(Position+10,board,pieces)]->setID(0);
-      }
-    }
-    Position +=10;
   }
   return pieces;
 
@@ -176,7 +125,53 @@ Bishop::Bishop(int position,char color,int id)
 }
 
 Piece **Bishop::Move(int SquareToMove,BoardRep board,Piece **pieces){
-  Position -= 7;
+  int Distance = Position - SquareToMove;
+  bool legalmove = false;
+  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+  if((Distance)%7 == 0){
+    legalmove = true;
+    if(Distance/7 > 0){
+      for(int i = 1; i <= (Distance/7)-1;i++){
+        if(board.squares[Position-7*i] != 0){
+          legalmove = false;
+        }
+      }
+    }else{
+      for(int i = 1; i <= -1*(Distance/7)-1;i++){
+        if(board.squares[Position+7*i] != 0){
+          legalmove = false;
+        }
+      }
+    }
+    if(legalmove == true){
+      Position = Position-(Distance);
+    }
+  }else if((Distance)%9 == 0){
+    legalmove = true;
+    if(Distance/9 > 0){
+      for(int i = 1; i <= (Distance/9)-1;i++){
+        if(board.squares[Position-9*i] != 0){
+          legalmove = false;
+        }
+      }
+    }else{
+      for(int i = 1; i <= -1*(Distance/9)-1;i++){
+        if(board.squares[Position+9*i] != 0){
+          legalmove = false;
+        }
+      }
+    }
+  }
+    if(legalmove == true){
+      Position = SquareToMove;
+    }
+  }
+  if(board.squares[SquareToMove] != 0){
+    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+      pieces[FindPiece(SquareToMove,board,pieces)]->setPosition(64);
+      pieces[FindPiece(SquareToMove,board,pieces)]->setID(0);
+    }
+  }
   return pieces;
 }
 
@@ -191,7 +186,20 @@ King::King(int position,char color,int id)
 }
 
 Piece **King::Move(int SquareToMove,BoardRep board,Piece **pieces){
-  Position -= 8;
+  int Distance = Position - SquareToMove;
+  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+    if(Distance == 8 || Distance == 7 || Distance == 9 || Distance == 1 || Distance == -1 || Distance == -8 || Distance == -7 || Distance ==-9 ){
+      Position = SquareToMove;
+    }
+  }
+  if(board.squares[SquareToMove] != 0){
+    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+      pieces[FindPiece(SquareToMove,board,pieces)]->setPosition(64);
+      pieces[FindPiece(SquareToMove,board,pieces)]->setID(0);
+    }
+  }
+  return pieces;
+
   return pieces;
 }
 
@@ -221,7 +229,53 @@ Rook::Rook(int position,char color,int id)
 }
 
 Piece **Rook::Move(int SquareToMove,BoardRep board,Piece **pieces){
-  Position -= 8;
+  int Distance = Position - SquareToMove;
+  bool legalmove = false;
+  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+  if((Distance)%8 == 0){
+    legalmove = true;
+    if(Distance/8 > 0){
+      for(int i = 1; i <= (Distance/8)-1;i++){
+        if(board.squares[Position-8*i] != 0){
+          legalmove = false;
+        }
+      }
+    }else{
+      for(int i = 1; i <= -1*(Distance/8)-1;i++){
+        if(board.squares[Position+8*i] != 0){
+          legalmove = false;
+        }
+      }
+    }
+    if(legalmove == true){
+      Position = Position-(Distance);
+    }
+  }else if(board.coordinates[SquareToMove].y == board.coordinates[Position].y){
+    legalmove = true;
+    if(Distance > 0){
+      for(int i = 1; i <= (Distance)-1;i++){
+        if(board.squares[Position-1*i] != 0){
+          legalmove = false;
+        }
+      }
+    }else{
+      for(int i = 1; i <= -1*(Distance/1)-1;i++){
+        if(board.squares[Position+1*i] != 0){
+          legalmove = false;
+        }
+      }
+    }
+  }
+    if(legalmove == true){
+      Position = SquareToMove;
+    }
+  }
+  if(board.squares[SquareToMove] != 0){
+    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+      pieces[FindPiece(SquareToMove,board,pieces)]->setPosition(64);
+      pieces[FindPiece(SquareToMove,board,pieces)]->setID(0);
+    }
+  }
   return pieces;
 }
 
