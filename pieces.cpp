@@ -214,7 +214,86 @@ Queen::Queen(int position,char color,int id)
 }
 
 Piece **Queen::Move(int SquareToMove,BoardRep board,Piece **pieces){
-  Position -= 7;
+  int Distance = Position - SquareToMove;
+  bool legalmove = false;
+  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+  if((Distance)%7 == 0){
+    legalmove = true;
+    if(Distance/7 > 0){
+      for(int i = 1; i <= (Distance/7)-1;i++){
+        if(board.squares[Position-7*i] != 0){
+          legalmove = false;
+        }
+      }
+    }else{
+      for(int i = 1; i <= -1*(Distance/7)-1;i++){
+        if(board.squares[Position+7*i] != 0){
+          legalmove = false;
+        }
+      }
+    }
+    if(legalmove == true){
+      Position = Position-(Distance);
+    }
+  }else if((Distance)%9 == 0){
+    legalmove = true;
+    if(Distance/9 > 0){
+      for(int i = 1; i <= (Distance/9)-1;i++){
+        if(board.squares[Position-9*i] != 0){
+          legalmove = false;
+        }
+      }
+    }else{
+      for(int i = 1; i <= -1*(Distance/9)-1;i++){
+        if(board.squares[Position+9*i] != 0){
+          legalmove = false;
+        }
+      }
+    }
+  }else if((Distance)%8 == 0){
+    legalmove = true;
+    if(Distance/8 > 0){
+      for(int i = 1; i <= (Distance/8)-1;i++){
+        if(board.squares[Position-8*i] != 0){
+          legalmove = false;
+        }
+      }
+    }else{
+      for(int i = 1; i <= -1*(Distance/8)-1;i++){
+        if(board.squares[Position+8*i] != 0){
+          legalmove = false;
+        }
+      }
+    }
+    if(legalmove == true){
+      Position = Position-(Distance);
+    }
+  }else if(board.coordinates[SquareToMove].y == board.coordinates[Position].y){
+    legalmove = true;
+    if(Distance > 0){
+      for(int i = 1; i <= (Distance)-1;i++){
+        if(board.squares[Position-1*i] != 0){
+          legalmove = false;
+        }
+      }
+    }else{
+      for(int i = 1; i <= -1*(Distance/1)-1;i++){
+        if(board.squares[Position+1*i] != 0){
+          legalmove = false;
+        }
+      }
+    }
+  }
+    if(legalmove == true){
+      Position = SquareToMove;
+    }
+  }
+  if(board.squares[SquareToMove] != 0){
+    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+      pieces[FindPiece(SquareToMove,board,pieces)]->setPosition(64);
+      pieces[FindPiece(SquareToMove,board,pieces)]->setID(0);
+    }
+  }
   return pieces;
 }
 
