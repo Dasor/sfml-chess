@@ -27,6 +27,10 @@ std::string Piece::getPath(){
   return Path;
 }
 
+bool Piece::getHasMoved(){
+  return true;
+}
+
 void Piece::setID(int id){
   ID = id;
 }
@@ -128,40 +132,40 @@ Piece **Bishop::Move(int SquareToMove,BoardRep board,Piece **pieces){
   int Distance = Position - SquareToMove;
   bool legalmove = false;
   if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
-  if((Distance)%7 == 0){
-    legalmove = true;
-    if(Distance/7 > 0){
-      for(int i = 1; i <= (Distance/7)-1;i++){
-        if(board.squares[Position-7*i] != 0){
-          legalmove = false;
+    if((Distance)%7 == 0){
+      legalmove = true;
+      if(Distance/7 > 0){
+        for(int i = 1; i <= (Distance/7)-1;i++){
+          if(board.squares[Position-7*i] != 0){
+            legalmove = false;
+          }
+        }
+      }else{
+        for(int i = 1; i <= -1*(Distance/7)-1;i++){
+          if(board.squares[Position+7*i] != 0){
+            legalmove = false;
+          }
         }
       }
-    }else{
-      for(int i = 1; i <= -1*(Distance/7)-1;i++){
-        if(board.squares[Position+7*i] != 0){
-          legalmove = false;
+      if(legalmove == true){
+        Position = Position-(Distance);
+      }
+    }else if((Distance)%9 == 0){
+      legalmove = true;
+      if(Distance/9 > 0){
+        for(int i = 1; i <= (Distance/9)-1;i++){
+          if(board.squares[Position-9*i] != 0){
+            legalmove = false;
+          }
+        }
+      }else{
+        for(int i = 1; i <= -1*(Distance/9)-1;i++){
+          if(board.squares[Position+9*i] != 0){
+            legalmove = false;
+          }
         }
       }
     }
-    if(legalmove == true){
-      Position = Position-(Distance);
-    }
-  }else if((Distance)%9 == 0){
-    legalmove = true;
-    if(Distance/9 > 0){
-      for(int i = 1; i <= (Distance/9)-1;i++){
-        if(board.squares[Position-9*i] != 0){
-          legalmove = false;
-        }
-      }
-    }else{
-      for(int i = 1; i <= -1*(Distance/9)-1;i++){
-        if(board.squares[Position+9*i] != 0){
-          legalmove = false;
-        }
-      }
-    }
-  }
     if(legalmove == true){
       Position = SquareToMove;
     }
@@ -183,6 +187,7 @@ King::King(int position,char color,int id)
   }else{
     Path = "pictures/bking.png";
   }
+  Castle = true;
 }
 
 Piece **King::Move(int SquareToMove,BoardRep board,Piece **pieces){
@@ -190,6 +195,22 @@ Piece **King::Move(int SquareToMove,BoardRep board,Piece **pieces){
   if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
     if(Distance == 8 || Distance == 7 || Distance == 9 || Distance == 1 || Distance == -1 || Distance == -8 || Distance == -7 || Distance ==-9 ){
       Position = SquareToMove;
+      Castle = false;
+    }else if(Castle == true){
+      std::cout << pieces[9]->getHasMoved() << '\n';
+      if(SquareToMove == 62 && board.squares[61] == 0 && board.squares[62] == 0 && pieces[9]->getHasMoved() == false){
+        Position = SquareToMove;
+        pieces[9]->setPosition(61);
+      }else if(SquareToMove == 6 && board.squares[5] == 0 && board.squares[6] == 0 && pieces[25]->getHasMoved() == false){
+        Position = SquareToMove;
+        pieces[25]->setPosition(5);
+      }else if(SquareToMove == 58 && board.squares[59] == 0 && board.squares[58] == 0 && board.squares[57] == 0 && pieces[8]->getHasMoved() == false){
+        Position = SquareToMove;
+        pieces[8]->setPosition(59);
+      }else if(SquareToMove == 2 && board.squares[3] == 0 && board.squares[2] == 0 && board.squares[1] == 0 && pieces[24]->getHasMoved() == false){
+        Position = SquareToMove;
+        pieces[24]->setPosition(3);
+      }
     }
   }
   if(board.squares[SquareToMove] != 0){
@@ -198,8 +219,6 @@ Piece **King::Move(int SquareToMove,BoardRep board,Piece **pieces){
       pieces[FindPiece(SquareToMove,board,pieces)]->setID(0);
     }
   }
-  return pieces;
-
   return pieces;
 }
 
@@ -217,73 +236,73 @@ Piece **Queen::Move(int SquareToMove,BoardRep board,Piece **pieces){
   int Distance = Position - SquareToMove;
   bool legalmove = false;
   if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
-  if((Distance)%7 == 0){
-    legalmove = true;
-    if(Distance/7 > 0){
-      for(int i = 1; i <= (Distance/7)-1;i++){
-        if(board.squares[Position-7*i] != 0){
-          legalmove = false;
+    if((Distance)%7 == 0){
+      legalmove = true;
+      if(Distance/7 > 0){
+        for(int i = 1; i <= (Distance/7)-1;i++){
+          if(board.squares[Position-7*i] != 0){
+            legalmove = false;
+          }
+        }
+      }else{
+        for(int i = 1; i <= -1*(Distance/7)-1;i++){
+          if(board.squares[Position+7*i] != 0){
+            legalmove = false;
+          }
         }
       }
-    }else{
-      for(int i = 1; i <= -1*(Distance/7)-1;i++){
-        if(board.squares[Position+7*i] != 0){
-          legalmove = false;
+      if(legalmove == true){
+        Position = Position-(Distance);
+      }
+    }else if((Distance)%9 == 0){
+      legalmove = true;
+      if(Distance/9 > 0){
+        for(int i = 1; i <= (Distance/9)-1;i++){
+          if(board.squares[Position-9*i] != 0){
+            legalmove = false;
+          }
+        }
+      }else{
+        for(int i = 1; i <= -1*(Distance/9)-1;i++){
+          if(board.squares[Position+9*i] != 0){
+            legalmove = false;
+          }
+        }
+      }
+    }else if((Distance)%8 == 0){
+      legalmove = true;
+      if(Distance/8 > 0){
+        for(int i = 1; i <= (Distance/8)-1;i++){
+          if(board.squares[Position-8*i] != 0){
+            legalmove = false;
+          }
+        }
+      }else{
+        for(int i = 1; i <= -1*(Distance/8)-1;i++){
+          if(board.squares[Position+8*i] != 0){
+            legalmove = false;
+          }
+        }
+      }
+      if(legalmove == true){
+        Position = Position-(Distance);
+      }
+    }else if(board.coordinates[SquareToMove].y == board.coordinates[Position].y){
+      legalmove = true;
+      if(Distance > 0){
+        for(int i = 1; i <= (Distance)-1;i++){
+          if(board.squares[Position-1*i] != 0){
+            legalmove = false;
+          }
+        }
+      }else{
+        for(int i = 1; i <= -1*(Distance/1)-1;i++){
+          if(board.squares[Position+1*i] != 0){
+            legalmove = false;
+          }
         }
       }
     }
-    if(legalmove == true){
-      Position = Position-(Distance);
-    }
-  }else if((Distance)%9 == 0){
-    legalmove = true;
-    if(Distance/9 > 0){
-      for(int i = 1; i <= (Distance/9)-1;i++){
-        if(board.squares[Position-9*i] != 0){
-          legalmove = false;
-        }
-      }
-    }else{
-      for(int i = 1; i <= -1*(Distance/9)-1;i++){
-        if(board.squares[Position+9*i] != 0){
-          legalmove = false;
-        }
-      }
-    }
-  }else if((Distance)%8 == 0){
-    legalmove = true;
-    if(Distance/8 > 0){
-      for(int i = 1; i <= (Distance/8)-1;i++){
-        if(board.squares[Position-8*i] != 0){
-          legalmove = false;
-        }
-      }
-    }else{
-      for(int i = 1; i <= -1*(Distance/8)-1;i++){
-        if(board.squares[Position+8*i] != 0){
-          legalmove = false;
-        }
-      }
-    }
-    if(legalmove == true){
-      Position = Position-(Distance);
-    }
-  }else if(board.coordinates[SquareToMove].y == board.coordinates[Position].y){
-    legalmove = true;
-    if(Distance > 0){
-      for(int i = 1; i <= (Distance)-1;i++){
-        if(board.squares[Position-1*i] != 0){
-          legalmove = false;
-        }
-      }
-    }else{
-      for(int i = 1; i <= -1*(Distance/1)-1;i++){
-        if(board.squares[Position+1*i] != 0){
-          legalmove = false;
-        }
-      }
-    }
-  }
     if(legalmove == true){
       Position = SquareToMove;
     }
@@ -305,48 +324,51 @@ Rook::Rook(int position,char color,int id)
   }else{
     Path = "pictures/brook.png";
   }
+  HasMoved = false;
 }
 
 Piece **Rook::Move(int SquareToMove,BoardRep board,Piece **pieces){
   int Distance = Position - SquareToMove;
   bool legalmove = false;
   if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
-  if((Distance)%8 == 0){
-    legalmove = true;
-    if(Distance/8 > 0){
-      for(int i = 1; i <= (Distance/8)-1;i++){
-        if(board.squares[Position-8*i] != 0){
-          legalmove = false;
+    if((Distance)%8 == 0){
+      legalmove = true;
+      if(Distance/8 > 0){
+        for(int i = 1; i <= (Distance/8)-1;i++){
+          if(board.squares[Position-8*i] != 0){
+            legalmove = false;
+          }
+        }
+      }else{
+        for(int i = 1; i <= -1*(Distance/8)-1;i++){
+          if(board.squares[Position+8*i] != 0){
+            legalmove = false;
+          }
         }
       }
-    }else{
-      for(int i = 1; i <= -1*(Distance/8)-1;i++){
-        if(board.squares[Position+8*i] != 0){
-          legalmove = false;
+      if(legalmove == true){
+        Position = Position-(Distance);
+        HasMoved = true;
+      }
+    }else if(board.coordinates[SquareToMove].y == board.coordinates[Position].y){
+      legalmove = true;
+      if(Distance > 0){
+        for(int i = 1; i <= (Distance)-1;i++){
+          if(board.squares[Position-1*i] != 0){
+            legalmove = false;
+          }
+        }
+      }else{
+        for(int i = 1; i <= -1*(Distance/1)-1;i++){
+          if(board.squares[Position+1*i] != 0){
+            legalmove = false;
+          }
         }
       }
     }
-    if(legalmove == true){
-      Position = Position-(Distance);
-    }
-  }else if(board.coordinates[SquareToMove].y == board.coordinates[Position].y){
-    legalmove = true;
-    if(Distance > 0){
-      for(int i = 1; i <= (Distance)-1;i++){
-        if(board.squares[Position-1*i] != 0){
-          legalmove = false;
-        }
-      }
-    }else{
-      for(int i = 1; i <= -1*(Distance/1)-1;i++){
-        if(board.squares[Position+1*i] != 0){
-          legalmove = false;
-        }
-      }
-    }
-  }
     if(legalmove == true){
       Position = SquareToMove;
+      HasMoved = true;
     }
   }
   if(board.squares[SquareToMove] != 0){
@@ -358,6 +380,9 @@ Piece **Rook::Move(int SquareToMove,BoardRep board,Piece **pieces){
   return pieces;
 }
 
+bool Rook::getHasMoved(){
+  return HasMoved;
+}
 
 
 Piece **InitPieces(){
@@ -385,8 +410,8 @@ Piece **InitPieces(){
   pieces[27] = new Knight(6,'b',28);
   pieces[28] = new Bishop(2,'b',29);
   pieces[29] = new Bishop(5,'b',30);
-  pieces[30] = new King(3,'b',31);
-  pieces[31] = new Queen(4,'b',32);
+  pieces[30] = new King(4,'b',31);
+  pieces[31] = new Queen(3,'b',32);
 
   return pieces;
 }

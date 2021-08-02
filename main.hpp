@@ -27,6 +27,7 @@ public:
   int getID();
   int getPosition();
   char getColor();
+  virtual bool getHasMoved();
   std::string getPath();
   void setID(int id);
   void setPosition(int position);
@@ -51,6 +52,7 @@ public:
 };
 
 class King : public Piece{
+  bool Castle;
 public:
   King(int position,char color,int id);
   Piece **Move(int SquareToMove,BoardRep board,Piece **pieces);
@@ -63,9 +65,11 @@ public:
 };
 
 class Rook : public Piece{
+  bool HasMoved;
 public:
   Rook(int position,char color,int id);
   Piece **Move(int SquareToMove,BoardRep board,Piece **pieces);
+  bool getHasMoved();
 };
 
 Piece **InitPieces();
