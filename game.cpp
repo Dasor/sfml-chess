@@ -97,3 +97,16 @@ int ClosestSquare(int x , int y ,BoardRep board){
   std::cout<<"Closest square not found\n";
   return 0;
 }
+
+Piece **TrackPassant(Piece **pieces){
+  for(int i = 0; i<8;i++){
+    pieces[i]->setMoved2Squares(false);
+  }
+
+  for(int i = 16; i<24;i++){
+    pieces[i]->setMoved2Squares(false);
+  }
+
+  return pieces;
+
+}

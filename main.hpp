@@ -31,12 +31,16 @@ public:
   std::string getPath();
   void setID(int id);
   void setPosition(int position);
+  virtual void setMoved2Squares(bool set);
 };
 
 class Pawn : public Piece{
+  bool Moved2Squares;
 public:
   Pawn(int position,char color,int id);
   Piece **Move(int SquareToMove,BoardRep board,Piece **pieces);
+  bool getHasMoved();
+  void setMoved2Squares(bool set);
 };
 
 class Knight : public Piece{
@@ -79,7 +83,7 @@ BoardRep initBoard();
 BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window);
 int ClosestSquare(int x , int y ,BoardRep board);
 int FindPiece(int index,BoardRep board, Piece **pieces);
-
+Piece **TrackPassant(Piece **pieces);
 
 
 

@@ -13,6 +13,7 @@ int main(){
   bool *ToMove = new bool;
   *ToMove = white;
   int j = 0;
+  int turnnum = 0;
 
 
   DrawBoard(window);
@@ -45,6 +46,10 @@ int main(){
               pieces = pieces[j]->Move(squareClicked2,board,pieces);
               if(pieces[j]->getPosition() != legalmove){
                 ManageTurns(&ToMove);
+                turnnum++;
+                if(turnnum != 0 && turnnum % 3 == 0){
+                  TrackPassant(pieces);
+                }
               }
             }
             PieceSelected = false;
