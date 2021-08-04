@@ -41,7 +41,7 @@ int main(){
           }else{
             squareClicked2 = ClosestSquare(event.mouseButton.x,event.mouseButton.y,board);
             j = FindPiece(squareClicked1,board,pieces);
-            if(pieces[j]->getColor() == 'w' && *ToMove == white || pieces[j]->getColor() == 'b' && *ToMove == black){
+            if(pieces[j]->getColor() == white && *ToMove == white || pieces[j]->getColor() == black && *ToMove == black){
               legalmove = pieces[j]->getPosition(); //checks if positions changed
               pieces = pieces[j]->Move(squareClicked2,board,pieces);
               if(pieces[j]->getPosition() != legalmove){

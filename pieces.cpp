@@ -3,7 +3,7 @@
 #include "main.hpp"
 #include "definitions.hpp"
 
-Piece::Piece(int position,char color,int id){
+Piece::Piece(int position,bool color,int id){
   Position = position;
   Color = color;
   ID = id;
@@ -19,7 +19,7 @@ int Piece::getPosition(){
   return Position;
 }
 
-char Piece::getColor(){
+bool Piece::getColor(){
   return Color;
 }
 
@@ -41,10 +41,10 @@ void Piece::setPosition(int position){
 
 void Piece::setMoved2Squares(bool set){}
 
-Pawn::Pawn(int position,char color,int id)
+Pawn::Pawn(int position,bool color,int id)
 :Piece(position,color,id)
 {
-  if(color == 'w'){
+  if(color == white){
     Path = "pictures/wpawn.png";
   }else{
     Path = "pictures/bpawn.png";
@@ -54,7 +54,7 @@ Pawn::Pawn(int position,char color,int id)
 
 Piece **Pawn::Move(int SquareToMove,BoardRep board, Piece **pieces){
   int Distance = Position - SquareToMove;
-  if(Color == 'w'){
+  if(Color == white){
     if(Distance == 8 && board.squares[SquareToMove] == 0){
       Position = SquareToMove;
     }else if(Distance == 16 && Position >=48 && Position <= 55 && board.squares[SquareToMove] == 0 && board.squares[SquareToMove] == 0){
@@ -66,7 +66,7 @@ Piece **Pawn::Move(int SquareToMove,BoardRep board, Piece **pieces){
     }else if(Distance == 9 && board.squares[SquareToMove] >=17){
       DeletePiece(SquareToMove,board,pieces);
       Position = SquareToMove;
-    }else if(pieces[FindPiece(SquareToMove+8,board,pieces)]->getHasMoved() == true && Position >= 24 && Position <= 31){
+    }else if(Position >= 24 && Position <= 31 && pieces[FindPiece(SquareToMove+8,board,pieces)]->getHasMoved() == true){
       DeletePiece(SquareToMove+8,board,pieces);
       Position = SquareToMove;
     }
@@ -82,7 +82,7 @@ Piece **Pawn::Move(int SquareToMove,BoardRep board, Piece **pieces){
     }else if(Distance == -9 && board.squares[SquareToMove] != 0 && board.squares[SquareToMove] <= 16){
       DeletePiece(SquareToMove,board,pieces);
       Position = SquareToMove;
-    }else if(pieces[FindPiece(SquareToMove-8,board,pieces)]->getHasMoved() == true && Position >=32 && Position <=39){
+    }else if(Position >=32 && Position <=39 && pieces[FindPiece(SquareToMove-8,board,pieces)]->getHasMoved() == true){
       DeletePiece(SquareToMove-8,board,pieces);
       Position = SquareToMove;
     }
@@ -98,10 +98,10 @@ void Pawn::setMoved2Squares(bool set){
   Moved2Squares = set;
 }
 
-Knight::Knight(int position,char color,int id)
+Knight::Knight(int position,bool color,int id)
 :Piece(position,color,id)
 {
-  if(color == 'w'){
+  if(Color == white){
     Path = "pictures/wknight.png";
   }else{
     Path = "pictures/bknight.png";
@@ -110,13 +110,13 @@ Knight::Knight(int position,char color,int id)
 
 Piece **Knight::Move(int SquareToMove,BoardRep board,Piece **pieces){
   int Distance = Position - SquareToMove;
-  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+  if(board.squares[SquareToMove] == 0 || Color == white && board.squares[SquareToMove] > 16 || Color == black && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
     if(Distance == 17 || Distance == 15 || Distance == 10 || Distance == 6 || Distance == -6 || Distance == -17 || Distance == -15 || Distance ==-10 ){
       Position = SquareToMove;
     }
   }
   if(board.squares[SquareToMove] != 0){
-    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+    if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
       DeletePiece(SquareToMove,board,pieces);
     }
   }
@@ -124,10 +124,10 @@ Piece **Knight::Move(int SquareToMove,BoardRep board,Piece **pieces){
 
 }
 
-Bishop::Bishop(int position,char color,int id)
+Bishop::Bishop(int position,bool color,int id)
 :Piece(position,color,id)
 {
-  if(color == 'w'){
+  if(Color == white){
     Path = "pictures/wbishop.png";
   }else{
     Path = "pictures/bbishop.png";
@@ -137,7 +137,7 @@ Bishop::Bishop(int position,char color,int id)
 Piece **Bishop::Move(int SquareToMove,BoardRep board,Piece **pieces){
   int Distance = Position - SquareToMove;
   bool legalmove = false;
-  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+  if(board.squares[SquareToMove] == 0 || Color == white && board.squares[SquareToMove] > 16 || Color == black && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
     if((Distance)%7 == 0){
       legalmove = true;
       if(Distance/7 > 0){
@@ -177,17 +177,17 @@ Piece **Bishop::Move(int SquareToMove,BoardRep board,Piece **pieces){
     }
   }
   if(board.squares[SquareToMove] != 0){
-    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+    if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
       DeletePiece(SquareToMove,board,pieces);
     }
   }
   return pieces;
 }
 
-King::King(int position,char color,int id)
+King::King(int position,bool color,int id)
 :Piece(position,color,id)
 {
-  if(color == 'w'){
+  if(Color == white){
     Path = "pictures/wking.png";
   }else{
     Path = "pictures/bking.png";
@@ -197,12 +197,11 @@ King::King(int position,char color,int id)
 
 Piece **King::Move(int SquareToMove,BoardRep board,Piece **pieces){
   int Distance = Position - SquareToMove;
-  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+  if(board.squares[SquareToMove] == 0 || Color == white && board.squares[SquareToMove] > 16 || Color == black && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
     if(Distance == 8 || Distance == 7 || Distance == 9 || Distance == 1 || Distance == -1 || Distance == -8 || Distance == -7 || Distance ==-9 ){
       Position = SquareToMove;
       Castle = false;
     }else if(Castle == true){
-      std::cout << pieces[9]->getHasMoved() << '\n';
       if(SquareToMove == 62 && board.squares[61] == 0 && board.squares[62] == 0 && pieces[9]->getHasMoved() == false){
         Position = SquareToMove;
         pieces[9]->setPosition(61);
@@ -219,17 +218,17 @@ Piece **King::Move(int SquareToMove,BoardRep board,Piece **pieces){
     }
   }
   if(board.squares[SquareToMove] != 0){
-    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+    if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
       DeletePiece(SquareToMove,board,pieces);
     }
   }
   return pieces;
 }
 
-Queen::Queen(int position,char color,int id)
+Queen::Queen(int position,bool color,int id)
 :Piece(position,color,id)
 {
-  if(color == 'w'){
+  if(Color == white){
     Path = "pictures/wqueen.png";
   }else{
     Path = "pictures/bqueen.png";
@@ -239,7 +238,7 @@ Queen::Queen(int position,char color,int id)
 Piece **Queen::Move(int SquareToMove,BoardRep board,Piece **pieces){
   int Distance = Position - SquareToMove;
   bool legalmove = false;
-  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+  if(board.squares[SquareToMove] == 0 || Color == white && board.squares[SquareToMove] > 16 || Color == black && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
     if((Distance)%7 == 0){
       legalmove = true;
       if(Distance/7 > 0){
@@ -312,17 +311,17 @@ Piece **Queen::Move(int SquareToMove,BoardRep board,Piece **pieces){
     }
   }
   if(board.squares[SquareToMove] != 0){
-    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+    if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
       DeletePiece(SquareToMove,board,pieces);
     }
   }
   return pieces;
 }
 
-Rook::Rook(int position,char color,int id)
+Rook::Rook(int position,bool color,int id)
 :Piece(position,color,id)
 {
-  if(color == 'w'){
+  if(Color == white){
     Path = "pictures/wrook.png";
   }else{
     Path = "pictures/brook.png";
@@ -333,7 +332,7 @@ Rook::Rook(int position,char color,int id)
 Piece **Rook::Move(int SquareToMove,BoardRep board,Piece **pieces){
   int Distance = Position - SquareToMove;
   bool legalmove = false;
-  if(board.squares[SquareToMove] == 0 || Color == 'w' && board.squares[SquareToMove] > 16 || Color == 'b' && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
+  if(board.squares[SquareToMove] == 0 || Color == white && board.squares[SquareToMove] > 16 || Color == black && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
     if((Distance)%8 == 0){
       legalmove = true;
       if(Distance/8 > 0){
@@ -375,7 +374,7 @@ Piece **Rook::Move(int SquareToMove,BoardRep board,Piece **pieces){
     }
   }
   if(board.squares[SquareToMove] != 0){
-    if(Color == 'b' && board.squares[SquareToMove] <= 16 || Color == 'w' && board.squares[SquareToMove] >= 17){
+    if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
       DeletePiece(SquareToMove,board,pieces);
     }
   }
@@ -391,29 +390,29 @@ Piece **InitPieces(){
   Piece **pieces = new Piece*[32];
   //white pieces
   for(int i = 0; i < 8;i++){
-    pieces[i] = new Pawn (48+i,'w',i+1);
+    pieces[i] = new Pawn (48+i,white,i+1);
   }
-  pieces[8] = new Rook(56,'w',9);
-  pieces[9] = new Rook(63,'w',10);
-  pieces[10] = new Knight(57,'w',11);
-  pieces[11] = new Knight(62,'w',12);
-  pieces[12] = new Bishop(58,'w',13);
-  pieces[13] = new Bishop(61,'w',14);
-  pieces[14] = new King(60,'w',15);
-  pieces[15] = new Queen(59,'w',16);
+  pieces[8] = new Rook(56,white,9);
+  pieces[9] = new Rook(63,white,10);
+  pieces[10] = new Knight(57,white,11);
+  pieces[11] = new Knight(62,white,12);
+  pieces[12] = new Bishop(58,white,13);
+  pieces[13] = new Bishop(61,white,14);
+  pieces[14] = new King(60,white,15);
+  pieces[15] = new Queen(59,white,16);
 
   //black pieces
   for(int j = 0,i = 16; i < 24;i++,j++){
-    pieces[i] = new Pawn (8+j,'b',i+1);
+    pieces[i] = new Pawn (8+j,black,i+1);
   }
-  pieces[24] = new Rook(0,'b',25);
-  pieces[25] = new Rook(7,'b',26);
-  pieces[26] = new Knight(1,'b',27);
-  pieces[27] = new Knight(6,'b',28);
-  pieces[28] = new Bishop(2,'b',29);
-  pieces[29] = new Bishop(5,'b',30);
-  pieces[30] = new King(4,'b',31);
-  pieces[31] = new Queen(3,'b',32);
+  pieces[24] = new Rook(0,black,25);
+  pieces[25] = new Rook(7,black,26);
+  pieces[26] = new Knight(1,black,27);
+  pieces[27] = new Knight(6,black,28);
+  pieces[28] = new Bishop(2,black,29);
+  pieces[29] = new Bishop(5,black,30);
+  pieces[30] = new King(4,black,31);
+  pieces[31] = new Queen(3,black,32);
 
   return pieces;
 }

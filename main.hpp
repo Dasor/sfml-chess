@@ -19,14 +19,14 @@ class Piece{
 protected:
   int ID;
   int Position;
-  char Color;
+  bool Color;
   std::string Path;
 public:
-  Piece(int position,char color,int id);
+  Piece(int position,bool color,int id);
   virtual Piece **Move(int SquareToMove,BoardRep board,Piece **pieces) = 0;
   int getID();
   int getPosition();
-  char getColor();
+  bool getColor();
   virtual bool getHasMoved();
   std::string getPath();
   void setID(int id);
@@ -37,7 +37,7 @@ public:
 class Pawn : public Piece{
   bool Moved2Squares;
 public:
-  Pawn(int position,char color,int id);
+  Pawn(int position,bool color,int id);
   Piece **Move(int SquareToMove,BoardRep board,Piece **pieces);
   bool getHasMoved();
   void setMoved2Squares(bool set);
@@ -45,33 +45,33 @@ public:
 
 class Knight : public Piece{
 public:
-  Knight(int position,char color,int id);
+  Knight(int position,bool color,int id);
   Piece **Move(int SquareToMove,BoardRep board,Piece **pieces);
 };
 
 class Bishop : public Piece{
 public:
-  Bishop(int position,char color,int id);
+  Bishop(int position,bool color,int id);
   Piece **Move(int SquareToMove,BoardRep board,Piece **pieces);
 };
 
 class King : public Piece{
   bool Castle;
 public:
-  King(int position,char color,int id);
+  King(int position,bool color,int id);
   Piece **Move(int SquareToMove,BoardRep board,Piece **pieces);
 };
 
 class Queen : public Piece{
 public:
-  Queen(int position,char color,int id);
+  Queen(int position,bool color,int id);
   Piece **Move(int SquareToMove,BoardRep board,Piece **pieces);
 };
 
 class Rook : public Piece{
   bool HasMoved;
 public:
-  Rook(int position,char color,int id);
+  Rook(int position,bool color,int id);
   Piece **Move(int SquareToMove,BoardRep board,Piece **pieces);
   bool getHasMoved();
 };
