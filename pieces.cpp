@@ -439,3 +439,90 @@ void DeletePiece(int index,BoardRep board, Piece **pieces){
   pieces[FindPiece(index,board,pieces)]->setPosition(64);
   pieces[FindPiece(index,board,pieces)]->setID(0);
 }
+
+typedef struct{
+
+  int kingPos;
+  int kingx;
+  int kingy;
+  int SquaresRight;
+  int SquaresDown;
+  int SquaresLeft;
+  int SquaresUp;
+
+}KingInfo;
+
+KingInfo *initKingInfo(BoardRep board,Piece **pieces,int king){
+  KingInfo *kinginfo = new KingInfo;
+
+  kinginfo->kingPos = pieces[king]->getPosition();
+  kinginfo->kingx = board.coordinates[kinginfo->kingPos].x;
+  kinginfo->kingy = board.coordinates[kinginfo->kingPos].y;
+  kinginfo->SquaresLeft = ((boardsize-squaresize) - kinginfo->kingx)/squaresize;
+  kinginfo->SquaresDown = ((boardsize-squaresize) - kinginfo->kingy)/squaresize;
+  kinginfo->SquaresRight = 7-kinginfo->SquaresLeft;
+  kinginfo->SquaresUp = 7-kinginfo->SquaresDown;
+
+  return kinginfo;
+
+}
+
+bool DiagonalCheck(int kingPos, int Squares,int dirrection,BoardRep board,int pieces[3]){
+
+    for(int i = 1; i <= Squares;i++){
+      if(board.squares[kingPos+dirrection*i] != 0 && kingPos+dirrection*i <= 63 && kingPos+dirrection*i >= 0){
+        if(board.squares[kingPos+dirrection*i] == pieces[0] || board.squares[kingPos+dirrection*i] == pieces[1] || board.squares[kingPos+dirrection*i] == pieces[2]){
+          return true;
+        }else{
+          return false;
+        }
+      }
+    }
+
+  return false;
+
+}
+
+bool CheckforChek(BoardRep board,Piece **pieces){
+  KingInfo *bkinginfo = initKingInfo(board,pieces,30);
+  KingInfo *wkinginfo = initKingInfo(board,pieces,14);
+  int HarmfulPieces[] = {9,10,16};
+
+  // is black king in check
+  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresDown,8,board,HarmfulPieces)) return true;
+  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresUp,-8,board,HarmfulPieces)) return true;
+  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,1,board,HarmfulPieces)) return true;
+  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return true;
+
+  HarmfulPieces[0] = 13;
+  HarmfulPieces[1] = 14;
+
+
+  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,9,board,HarmfulPieces))return true;
+  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-9,board,HarmfulPieces))return true;
+  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,7,board,HarmfulPieces))return true;
+  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,-7,board,HarmfulPieces))return true;
+
+  // is white king in check
+
+  HarmfulPieces[0] = 26;
+  HarmfulPieces[1] = 25;
+  HarmfulPieces[2] = 32;
+
+  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresDown,8,board,HarmfulPieces)) return true;
+  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresUp,-8,board,HarmfulPieces)) return true;
+  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,1,board,HarmfulPieces)) return true;
+  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return true;
+
+  HarmfulPieces[0] = 29;
+  HarmfulPieces[1] = 30;
+
+  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,9,board,HarmfulPieces))return true;
+  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-9,board,HarmfulPieces))return true;
+  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,7,board,HarmfulPieces))return true;
+  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,-7,board,HarmfulPieces))return true;
+
+  // no check
+  return false;
+
+}

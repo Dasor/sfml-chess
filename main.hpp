@@ -85,6 +85,7 @@ int ClosestSquare(int x , int y ,BoardRep board);
 int FindPiece(int index,BoardRep board, Piece **pieces);
 Piece **TrackPassant(Piece **pieces);
 void DeletePiece(int index,BoardRep board, Piece **pieces);
+bool CheckforChek(BoardRep board,Piece **pieces);
 
 
 

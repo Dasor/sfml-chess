@@ -60,6 +60,7 @@ int main(){
           board = DrawPieces(pieces,board,window);
 
           window.display();
+          std::cout << CheckforChek(board,pieces) << '\n';
         }
       }
     }
