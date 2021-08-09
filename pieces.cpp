@@ -515,30 +515,30 @@ return false;
 
 }
 
-bool CheckforChek(BoardRep board){
+short CheckforChek(BoardRep board){
   KingInfo *bkinginfo = initKingInfo(board,31);
   KingInfo *wkinginfo = initKingInfo(board,15);
   int HarmfulPieces[] = {9,10,16};
   int HarmfulKnight[] = {11,12};
 
   // is black king in check
-  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresDown,8,board,HarmfulPieces)) return true;
-  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresUp,-8,board,HarmfulPieces)) return true;
-  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,1,board,HarmfulPieces)) return true;
-  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresDown,8,board,HarmfulPieces)) return 2;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresUp,-8,board,HarmfulPieces)) return 2;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,1,board,HarmfulPieces)) return 2;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return 2;
 
   HarmfulPieces[0] = 13;
   HarmfulPieces[1] = 14;
 
 
-  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,9,board,HarmfulPieces))return true;
-  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-9,board,HarmfulPieces))return true;
-  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,7,board,HarmfulPieces))return true;
-  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,-7,board,HarmfulPieces))return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,9,board,HarmfulPieces))return 2;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-9,board,HarmfulPieces))return 2;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,7,board,HarmfulPieces))return 2;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,-7,board,HarmfulPieces))return 2;
 
-  if(PawnCheck(bkinginfo->kingPos,board))return true;
+  if(PawnCheck(bkinginfo->kingPos,board))return 2;
 
-  if(KnightCheck(bkinginfo->kingPos,board,HarmfulKnight))return true;
+  if(KnightCheck(bkinginfo->kingPos,board,HarmfulKnight))return 2;
 
   // is white king in check
 
@@ -546,28 +546,28 @@ bool CheckforChek(BoardRep board){
   HarmfulPieces[1] = 25;
   HarmfulPieces[2] = 32;
 
-  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresDown,8,board,HarmfulPieces)) return true;
-  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresUp,-8,board,HarmfulPieces)) return true;
-  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,1,board,HarmfulPieces)) return true;
-  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresDown,8,board,HarmfulPieces)) return 1;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresUp,-8,board,HarmfulPieces)) return 1;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,1,board,HarmfulPieces)) return 1;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return 1;
 
   HarmfulPieces[0] = 29;
   HarmfulPieces[1] = 30;
 
-  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,9,board,HarmfulPieces))return true;
-  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-9,board,HarmfulPieces))return true;
-  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,7,board,HarmfulPieces))return true;
-  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,-7,board,HarmfulPieces))return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,9,board,HarmfulPieces))return 1;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-9,board,HarmfulPieces))return 1;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,7,board,HarmfulPieces))return 1;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,-7,board,HarmfulPieces))return 1;
 
-  if(PawnCheck(wkinginfo->kingPos,board))return true;
+  if(PawnCheck(wkinginfo->kingPos,board))return 1;
 
   HarmfulKnight[0] = 27;
   HarmfulKnight[1] = 28;
 
-  if(KnightCheck(wkinginfo->kingPos,board,HarmfulKnight))return true;
+  if(KnightCheck(wkinginfo->kingPos,board,HarmfulKnight))return 1;
 
 
   // no check
-  return false;
+  return 0;
 
 }

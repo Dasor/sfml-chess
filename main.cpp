@@ -45,14 +45,13 @@ int main(){
             j = FindPiece(squareClicked1,board,pieces);
             if(pieces[j]->getColor() == white && *ToMove == white || pieces[j]->getColor() == black && *ToMove == black){
               legalmove = pieces[j]->getPosition(); //checks if positions changed
-              if(CheckforChek(boardcpy) == true){
                 boardcpy.squares[squareClicked2] = boardcpy.squares[squareClicked1];
                 boardcpy.squares[squareClicked1] = 0;
-              }if(CheckforChek(boardcpy) == false){
+               if(CheckforChek(boardcpy) == 0 || CheckforChek(boardcpy) == 1 && *ToMove == black || CheckforChek(boardcpy) == 2 && *ToMove == white ){
                 pieces = pieces[j]->Move(squareClicked2,board,pieces);
-                board = UpdateBoard(pieces,board);
-                boardcpy = board;
               }
+              board = UpdateBoard(pieces,board);
+              boardcpy = board;
               if(pieces[j]->getPosition() != legalmove){
                 ManageTurns(&ToMove);
                 turnnum++;
