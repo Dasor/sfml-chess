@@ -97,13 +97,12 @@ BoardRep UpdateBoard(Piece **pieces,BoardRep board){
 
 int ClosestSquare(int x , int y ,BoardRep board){
   for(int i = 0; i<64; i++){
-    if(x - board.coordinates[i].x >= -100 && x - board.coordinates[i].x <= 100){
-      if(y - board.coordinates[i].y >= -100 && y - board.coordinates[i].y <= 100){
+    if(x - board.coordinates[i].x >= -squaresize && x - board.coordinates[i].x <= squaresize){
+      if(y - board.coordinates[i].y >= -squaresize && y - board.coordinates[i].y <= squaresize){
         return i;
       }
     }
   }
-  std::cout<<"Closest square not found\n";
   return 0;
 }
 
