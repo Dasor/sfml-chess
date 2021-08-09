@@ -57,11 +57,8 @@ BoardRep initBoard(){
   return board;
 }
 
-BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window){
+void DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window){
 
-  for(int i = 0; i<64;i++){
-    board.squares[i] = 0;
-  }
 
   //fill board with pieces
   int piecePos;
@@ -71,10 +68,6 @@ BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window){
 
   for(int i = 0; i<32; i++){
     piecePos = pieces[i]->getPosition();
-    //std::cout << "PiecePos:" << piecePos <<'\n';
-    board.squares[piecePos] = pieces[i]->getID();
-    //std::cout << "Board:" << board.squares[piecePos] << '\n';
-    //std::cout << "PieceID:" << pieces[i]->getID() << '\n';
     if(pieces[i]->getID() != 0){
       texture.loadFromFile(pieces[i]->getPath());
       sprite.setTexture(texture);
@@ -83,7 +76,23 @@ BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window){
       window.draw(sprite);
     }
   }
+}
+
+BoardRep UpdateBoard(Piece **pieces,BoardRep board){
+
+  for(int i = 0; i<64;i++){
+    board.squares[i] = 0;
+  }
+
+  int piecePos;
+
+  for(int i = 0; i<32; i++){
+    piecePos = pieces[i]->getPosition();
+    board.squares[piecePos] = pieces[i]->getID();
+  }
+
   return board;
+
 }
 
 int ClosestSquare(int x , int y ,BoardRep board){

@@ -452,10 +452,14 @@ typedef struct{
 
 }KingInfo;
 
-KingInfo *initKingInfo(BoardRep board,Piece **pieces,int king){
+KingInfo *initKingInfo(BoardRep board,int king){
   KingInfo *kinginfo = new KingInfo;
+  kinginfo->kingPos = 0;
 
-  kinginfo->kingPos = pieces[king]->getPosition();
+  while(board.squares[kinginfo->kingPos] != king){
+    kinginfo->kingPos++;
+  }
+
   kinginfo->kingx = board.coordinates[kinginfo->kingPos].x;
   kinginfo->kingy = board.coordinates[kinginfo->kingPos].y;
   kinginfo->SquaresLeft = ((boardsize-squaresize) - kinginfo->kingx)/squaresize;
@@ -467,7 +471,7 @@ KingInfo *initKingInfo(BoardRep board,Piece **pieces,int king){
 
 }
 
-bool DiagonalCheck(int kingPos, int Squares,int dirrection,BoardRep board,int pieces[3]){
+bool LineCheck(int kingPos, int Squares,int dirrection,BoardRep board,int pieces[3]){
 
     for(int i = 1; i <= Squares;i++){
       if(board.squares[kingPos+dirrection*i] != 0 && kingPos+dirrection*i <= 63 && kingPos+dirrection*i >= 0){
@@ -483,25 +487,58 @@ bool DiagonalCheck(int kingPos, int Squares,int dirrection,BoardRep board,int pi
 
 }
 
-bool CheckforChek(BoardRep board,Piece **pieces){
-  KingInfo *bkinginfo = initKingInfo(board,pieces,30);
-  KingInfo *wkinginfo = initKingInfo(board,pieces,14);
+bool PawnCheck(int kingPos,BoardRep board){
+  if(board.squares[kingPos] == 31){
+    if(board.squares[kingPos+9] >= 1 && board.squares[kingPos+9] <= 8 || board.squares[kingPos+7] >= 1 && board.squares[kingPos+7] <= 8){
+      return true;
+    }
+  }else{
+    if(board.squares[kingPos-9] >= 17 && board.squares[kingPos-9] <= 24  || board.squares[kingPos-7] >= 17 && board.squares[kingPos-7] <= 24){
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool KnightCheck(int kingPos,BoardRep board,int Knight[2]){
+
+  if(board.squares[kingPos-17] == Knight[0] || board.squares[kingPos-15] == Knight[0] || board.squares[kingPos-10] == Knight[0] || board.squares[kingPos-6] == Knight[0] ||board.squares[kingPos+6] == Knight[0] || board.squares[kingPos+10] == Knight[0] || board.squares[kingPos+15] == Knight[0] || board.squares[kingPos+17] == Knight[0]){
+    return true;
+  }
+  if(board.squares[kingPos-17] == Knight[1] || board.squares[kingPos-15] == Knight[1] || board.squares[kingPos-10] == Knight[1] || board.squares[kingPos-6] == Knight[1] ||board.squares[kingPos+6] == Knight[1] || board.squares[kingPos+10] == Knight[1] || board.squares[kingPos+15] == Knight[1] || board.squares[kingPos+17] == Knight[1]){
+    return true;
+  }
+
+return false;
+
+
+}
+
+bool CheckforChek(BoardRep board){
+  KingInfo *bkinginfo = initKingInfo(board,31);
+  KingInfo *wkinginfo = initKingInfo(board,15);
   int HarmfulPieces[] = {9,10,16};
+  int HarmfulKnight[] = {11,12};
 
   // is black king in check
-  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresDown,8,board,HarmfulPieces)) return true;
-  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresUp,-8,board,HarmfulPieces)) return true;
-  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,1,board,HarmfulPieces)) return true;
-  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresDown,8,board,HarmfulPieces)) return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresUp,-8,board,HarmfulPieces)) return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,1,board,HarmfulPieces)) return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return true;
 
   HarmfulPieces[0] = 13;
   HarmfulPieces[1] = 14;
 
 
-  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,9,board,HarmfulPieces))return true;
-  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-9,board,HarmfulPieces))return true;
-  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,7,board,HarmfulPieces))return true;
-  if(DiagonalCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,-7,board,HarmfulPieces))return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,9,board,HarmfulPieces))return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresLeft,-9,board,HarmfulPieces))return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,7,board,HarmfulPieces))return true;
+  if(LineCheck(bkinginfo->kingPos,bkinginfo->SquaresRight,-7,board,HarmfulPieces))return true;
+
+  if(PawnCheck(bkinginfo->kingPos,board))return true;
+
+  if(KnightCheck(bkinginfo->kingPos,board,HarmfulKnight))return true;
 
   // is white king in check
 
@@ -509,18 +546,26 @@ bool CheckforChek(BoardRep board,Piece **pieces){
   HarmfulPieces[1] = 25;
   HarmfulPieces[2] = 32;
 
-  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresDown,8,board,HarmfulPieces)) return true;
-  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresUp,-8,board,HarmfulPieces)) return true;
-  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,1,board,HarmfulPieces)) return true;
-  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresDown,8,board,HarmfulPieces)) return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresUp,-8,board,HarmfulPieces)) return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,1,board,HarmfulPieces)) return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-1,board,HarmfulPieces)) return true;
 
   HarmfulPieces[0] = 29;
   HarmfulPieces[1] = 30;
 
-  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,9,board,HarmfulPieces))return true;
-  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-9,board,HarmfulPieces))return true;
-  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,7,board,HarmfulPieces))return true;
-  if(DiagonalCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,-7,board,HarmfulPieces))return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,9,board,HarmfulPieces))return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresLeft,-9,board,HarmfulPieces))return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,7,board,HarmfulPieces))return true;
+  if(LineCheck(wkinginfo->kingPos,wkinginfo->SquaresRight,-7,board,HarmfulPieces))return true;
+
+  if(PawnCheck(wkinginfo->kingPos,board))return true;
+
+  HarmfulKnight[0] = 27;
+  HarmfulKnight[1] = 28;
+
+  if(KnightCheck(wkinginfo->kingPos,board,HarmfulKnight))return true;
+
 
   // no check
   return false;

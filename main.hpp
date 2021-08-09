@@ -80,12 +80,13 @@ Piece **InitPieces();
 void ManageTurns(bool **ToMove);
 void DrawBoard(sf::RenderWindow &window);
 BoardRep initBoard();
-BoardRep DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window);
+void DrawPieces(Piece **pieces,BoardRep board,sf::RenderWindow &window);
+BoardRep UpdateBoard(Piece **pieces,BoardRep board);
 int ClosestSquare(int x , int y ,BoardRep board);
 int FindPiece(int index,BoardRep board, Piece **pieces);
 Piece **TrackPassant(Piece **pieces);
 void DeletePiece(int index,BoardRep board, Piece **pieces);
-bool CheckforChek(BoardRep board,Piece **pieces);
+bool CheckforChek(BoardRep board);
 
 
 

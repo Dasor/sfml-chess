@@ -7,6 +7,7 @@ int main(){
   // create the window
   sf::RenderWindow window(sf::VideoMode(boardsize, boardsize), "Chess", sf::Style::Titlebar | sf::Style::Close);
   BoardRep board = initBoard();
+  BoardRep boardcpy;
   Piece **pieces = InitPieces();
   int squareClicked1 ,squareClicked2,legalmove;
   bool PieceSelected = false;
@@ -17,7 +18,8 @@ int main(){
 
 
   DrawBoard(window);
-  board = DrawPieces(pieces,board,window);
+  board = UpdateBoard(pieces,board);
+  DrawPieces(pieces,board,window);
   window.display();
 
   // run the program as long as the window is open
@@ -43,7 +45,14 @@ int main(){
             j = FindPiece(squareClicked1,board,pieces);
             if(pieces[j]->getColor() == white && *ToMove == white || pieces[j]->getColor() == black && *ToMove == black){
               legalmove = pieces[j]->getPosition(); //checks if positions changed
-              pieces = pieces[j]->Move(squareClicked2,board,pieces);
+              if(CheckforChek(boardcpy) == true){
+                boardcpy.squares[squareClicked2] = boardcpy.squares[squareClicked1];
+                boardcpy.squares[squareClicked1] = 0;
+              }if(CheckforChek(boardcpy) == false){
+                pieces = pieces[j]->Move(squareClicked2,board,pieces);
+                board = UpdateBoard(pieces,board);
+                boardcpy = board;
+              }
               if(pieces[j]->getPosition() != legalmove){
                 ManageTurns(&ToMove);
                 turnnum++;
@@ -57,10 +66,9 @@ int main(){
           window.clear(sf::Color::Black);
 
           DrawBoard(window);
-          board = DrawPieces(pieces,board,window);
+          DrawPieces(pieces,board,window);
 
           window.display();
-          std::cout << CheckforChek(board,pieces) << '\n';
         }
       }
     }
