@@ -69,6 +69,8 @@ Piece **Pawn::Move(int SquareToMove,BoardRep board, Piece **pieces){
     }else if(Position >= 24 && Position <= 31 && pieces[FindPiece(SquareToMove+8,board,pieces)]->getHasMoved() == true){
       DeletePiece(SquareToMove+8,board,pieces);
       Position = SquareToMove;
+    }if(Position >= 0 && Position <= 7){
+      pieces[ID-1] = new Queen(Position,Color,16);
     }
   }else{
     if(Distance == -8 && board.squares[SquareToMove] == 0){
@@ -85,6 +87,8 @@ Piece **Pawn::Move(int SquareToMove,BoardRep board, Piece **pieces){
     }else if(Position >=32 && Position <=39 && pieces[FindPiece(SquareToMove-8,board,pieces)]->getHasMoved() == true){
       DeletePiece(SquareToMove-8,board,pieces);
       Position = SquareToMove;
+    }if(Position >= 56 && Position <= 63){
+      pieces[ID-1] = new Queen(Position,Color,32);
     }
   }
   return pieces;
@@ -462,9 +466,9 @@ KingInfo *initKingInfo(BoardRep board,int king){
 
   kinginfo->kingx = board.coordinates[kinginfo->kingPos].x;
   kinginfo->kingy = board.coordinates[kinginfo->kingPos].y;
-  kinginfo->SquaresLeft = ((boardsize-squaresize) - kinginfo->kingx)/squaresize;
+  kinginfo->SquaresRight = ((boardsize-squaresize) - kinginfo->kingx)/squaresize;
   kinginfo->SquaresDown = ((boardsize-squaresize) - kinginfo->kingy)/squaresize;
-  kinginfo->SquaresRight = 7-kinginfo->SquaresLeft;
+  kinginfo->SquaresLeft = 7-kinginfo->SquaresRight;
   kinginfo->SquaresUp = 7-kinginfo->SquaresDown;
 
   return kinginfo;
@@ -571,3 +575,9 @@ short CheckforChek(BoardRep board){
   return 0;
 
 }
+
+/*Promotion **Piece(int ID,Piece **pieces,bool color){
+
+  pieces[ID-1] = new Queen(pieces[ID-1]->getPosition(),color,ID);
+
+}*/

@@ -19,6 +19,7 @@ int main(){
 
   DrawBoard(window);
   board = UpdateBoard(pieces,board);
+  boardcpy = board;
   DrawPieces(pieces,board,window);
   window.display();
 
