@@ -15,7 +15,7 @@ In my opinion this code suffers from what I like to call **"spaghetti code"** ye
 * And last but not least `pieces.cpp`,here you can find a lot of classes that represent every type of piece, it is made with polymorphism and abstraction so every piece has a unique Move method.
 
 ## How to play
-this chess is a **2 player version** so there is no AI, to move a piece you just have to click the piece you want to move and then again click the square where you want it to move, en passant and castle are implemented as well as check and pins. Checkmate is also implemented, it just freezes the game because there are no moves left. Only thing left to implement is pawn promotion.
+this chess is a **2 player version** so there is no AI, to move a piece you just have to click the piece you want to move and then again click the square where you want it to move, en passant and castle are implemented as well as check pins and promotion. Checkmate is also implemented, it just freezes the game because there are no moves left.
 
 
 
