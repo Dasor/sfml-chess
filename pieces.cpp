@@ -114,16 +114,16 @@ Knight::Knight(int position,bool color,int id)
 
 Piece **Knight::Move(int SquareToMove,BoardRep board,Piece **pieces){
   int Distance = Position - SquareToMove;
-  if(board.squares[SquareToMove] == 0 || Color == white && board.squares[SquareToMove] > 16 || Color == black && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
-    if(Distance == 17 || Distance == 15 || Distance == 10 || Distance == 6 || Distance == -6 || Distance == -17 || Distance == -15 || Distance ==-10 ){
+  if(Distance == 17 || Distance == 15 || Distance == 10 || Distance == 6 || Distance == -6 || Distance == -17 || Distance == -15 || Distance ==-10 ){
+    if(board.squares[SquareToMove] == 0 || Color == white && board.squares[SquareToMove] > 16 || Color == black && board.squares[SquareToMove] < 17 && board.squares[SquareToMove] > 0){
       Position = SquareToMove;
+    }if(board.squares[SquareToMove] != 0){
+      if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
+        DeletePiece(SquareToMove,board,pieces);
+      }
     }
   }
-  if(board.squares[SquareToMove] != 0){
-    if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
-      DeletePiece(SquareToMove,board,pieces);
-    }
-  }
+
   return pieces;
 
 }
@@ -180,7 +180,7 @@ Piece **Bishop::Move(int SquareToMove,BoardRep board,Piece **pieces){
       Position = SquareToMove;
     }
   }
-  if(board.squares[SquareToMove] != 0){
+  if(board.squares[SquareToMove] != 0 && legalmove == true){
     if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
       DeletePiece(SquareToMove,board,pieces);
     }
@@ -205,7 +205,12 @@ Piece **King::Move(int SquareToMove,BoardRep board,Piece **pieces){
     if(Distance == 8 || Distance == 7 || Distance == 9 || Distance == 1 || Distance == -1 || Distance == -8 || Distance == -7 || Distance ==-9 ){
       Position = SquareToMove;
       Castle = false;
-    }else if(Castle == true){
+      if(board.squares[SquareToMove] != 0){
+        if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
+          DeletePiece(SquareToMove,board,pieces);
+        }
+      }
+    }else if(Castle == true && CheckforChek(board) == 0){
       if(SquareToMove == 62 && board.squares[61] == 0 && board.squares[62] == 0 && pieces[9]->getHasMoved() == false){
         Position = SquareToMove;
         pieces[9]->setPosition(61);
@@ -219,11 +224,6 @@ Piece **King::Move(int SquareToMove,BoardRep board,Piece **pieces){
         Position = SquareToMove;
         pieces[24]->setPosition(3);
       }
-    }
-  }
-  if(board.squares[SquareToMove] != 0){
-    if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
-      DeletePiece(SquareToMove,board,pieces);
     }
   }
   return pieces;
@@ -314,7 +314,7 @@ Piece **Queen::Move(int SquareToMove,BoardRep board,Piece **pieces){
       Position = SquareToMove;
     }
   }
-  if(board.squares[SquareToMove] != 0){
+  if(board.squares[SquareToMove] != 0 && legalmove == true){
     if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
       DeletePiece(SquareToMove,board,pieces);
     }
@@ -377,7 +377,7 @@ Piece **Rook::Move(int SquareToMove,BoardRep board,Piece **pieces){
       HasMoved = true;
     }
   }
-  if(board.squares[SquareToMove] != 0){
+  if(board.squares[SquareToMove] != 0 && legalmove == true){
     if(Color == black && board.squares[SquareToMove] <= 16 || Color == white && board.squares[SquareToMove] >= 17){
       DeletePiece(SquareToMove,board,pieces);
     }
@@ -477,15 +477,15 @@ KingInfo *initKingInfo(BoardRep board,int king){
 
 bool LineCheck(int kingPos, int Squares,int dirrection,BoardRep board,int pieces[3]){
 
-    for(int i = 1; i <= Squares;i++){
-      if(board.squares[kingPos+dirrection*i] != 0 && kingPos+dirrection*i <= 63 && kingPos+dirrection*i >= 0){
-        if(board.squares[kingPos+dirrection*i] == pieces[0] || board.squares[kingPos+dirrection*i] == pieces[1] || board.squares[kingPos+dirrection*i] == pieces[2]){
-          return true;
-        }else{
-          return false;
-        }
+  for(int i = 1; i <= Squares;i++){
+    if(board.squares[kingPos+dirrection*i] != 0 && kingPos+dirrection*i <= 63 && kingPos+dirrection*i >= 0){
+      if(board.squares[kingPos+dirrection*i] == pieces[0] || board.squares[kingPos+dirrection*i] == pieces[1] || board.squares[kingPos+dirrection*i] == pieces[2]){
+        return true;
+      }else{
+        return false;
       }
     }
+  }
 
   return false;
 
@@ -507,16 +507,26 @@ bool PawnCheck(int kingPos,BoardRep board){
 
 bool KnightCheck(int kingPos,BoardRep board,int Knight[2]){
 
-  if(board.squares[kingPos-17] == Knight[0] || board.squares[kingPos-15] == Knight[0] || board.squares[kingPos-10] == Knight[0] || board.squares[kingPos-6] == Knight[0] ||board.squares[kingPos+6] == Knight[0] || board.squares[kingPos+10] == Knight[0] || board.squares[kingPos+15] == Knight[0] || board.squares[kingPos+17] == Knight[0]){
-    return true;
+  for(int i = 0; i<=1;i++){
+    if(kingPos-17 >= 0 && board.squares[kingPos-17] == Knight[i] || kingPos-15 >= 0 && board.squares[kingPos-15] == Knight[i] || kingPos-10 >= 0 && board.squares[kingPos-10] == Knight[i] || kingPos-6 >= 0 && board.squares[kingPos-6] == Knight[i] ||kingPos+6 <= 64 && board.squares[kingPos+6] == Knight[i] || kingPos+10 <= 64 && board.squares[kingPos+10] == Knight[i] || kingPos+15 <= 64 && board.squares[kingPos+15] == Knight[i] || kingPos+17 <= 64 && board.squares[kingPos+17] == Knight[i]){
+      return true;
+    }
   }
-  if(board.squares[kingPos-17] == Knight[1] || board.squares[kingPos-15] == Knight[1] || board.squares[kingPos-10] == Knight[1] || board.squares[kingPos-6] == Knight[1] ||board.squares[kingPos+6] == Knight[1] || board.squares[kingPos+10] == Knight[1] || board.squares[kingPos+15] == Knight[1] || board.squares[kingPos+17] == Knight[1]){
-    return true;
+
+  return false;
+}
+
+bool KingCheck(int kingPos,BoardRep board){
+  if(board.squares[kingPos] == 31){
+    if(board.squares[kingPos-8] == 15  || board.squares[kingPos-9] == 15 || board.squares[kingPos-7] == 15 || board.squares[kingPos-1] == 15 ||board.squares[kingPos+1] == 15 || board.squares[kingPos+9] == 15 || board.squares[kingPos+8] == 15 || board.squares[kingPos+7] == 15){
+      return true;
+    }
+  }else{
+    if(board.squares[kingPos-8] == 31  || board.squares[kingPos-9] == 31 || board.squares[kingPos-7] == 31 || board.squares[kingPos-1] == 31 ||board.squares[kingPos+1] == 31 || board.squares[kingPos+9] == 31 || board.squares[kingPos+8] == 31 || board.squares[kingPos+7] == 31){
+      return true;
+    }
   }
-
-return false;
-
-
+  return false;
 }
 
 short CheckforChek(BoardRep board){
@@ -544,6 +554,8 @@ short CheckforChek(BoardRep board){
 
   if(KnightCheck(bkinginfo->kingPos,board,HarmfulKnight))return 2;
 
+  if(KingCheck(bkinginfo->kingPos,board))return 3;
+
   // is white king in check
 
   HarmfulPieces[0] = 26;
@@ -569,6 +581,7 @@ short CheckforChek(BoardRep board){
   HarmfulKnight[1] = 28;
 
   if(KnightCheck(wkinginfo->kingPos,board,HarmfulKnight))return 1;
+  if(KingCheck(wkinginfo->kingPos,board))return 3;
 
 
   // no check
@@ -578,6 +591,6 @@ short CheckforChek(BoardRep board){
 
 /*Promotion **Piece(int ID,Piece **pieces,bool color){
 
-  pieces[ID-1] = new Queen(pieces[ID-1]->getPosition(),color,ID);
+pieces[ID-1] = new Queen(pieces[ID-1]->getPosition(),color,ID);
 
 }*/
